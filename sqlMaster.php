@@ -16,9 +16,10 @@
 	function runSqlScripts($conn)
 	{
 		createUserTable($conn);
-		createProjectTable($conn);
+		createGroupTable($conn);
 		createTaskTable($conn);
-		createUserProjectTable($conn);
+		createUserGroupTable($conn);
+		createMessageBoardTable($conn);
 	}	
 
 	function createUserTable($conn){
@@ -31,33 +32,43 @@
 		}
 	}
 	
-	function createProjectTable($conn){
-		$sql = "DROP TABLE Project;";
+	function createGroupTable($conn){
+		$sql = "DROP TABLE Group;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Project (projectId INT NOT NULL, name varchar(25) NOT NULl, projectName varchar(25) NOT NULL, course varchar(25), description varchar(100), createDate DATE NOT NULL, dueDate DATE, PRIMARY KEY (projectId));";
+		$sql = "CREATE TABLE Group (groupId INT NOT NULL, name varchar(25) NOT NULL, groupName varchar(25) NOT NULL, course varchar(25), description varchar(100), createDate DATE NOT NULL, dueDate DATE, PRIMARY KEY (groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating Project Table issue' . mysql_error());
+			die('Creating Group Table issue' . mysql_error());
 		}
 	}
 
 	function createTaskTable($conn){
 		$sql = "DROP TABLE Task;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Task (taskId INT NOT NULL, projectId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, projectId));";
+		$sql = "CREATE TABLE Task (taskId INT NOT NULL, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Task Table issue' . mysql_error());
 		}
 	}
 	
-	function createUserProjectTable($conn){
-		$sql = "DROP TABLE UserProject;";
+	function createUserGroupTable($conn){
+		$sql = "DROP TABLE UserGroup;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE UserProject (userId INT NOT NULL, projectId INT NOT NULL, PRIMARY KEY(userId, projectId));";
+		$sql = "CREATE TABLE UserGroup (userId INT NOT NULL, groupId INT NOT NULL, PRIMARY KEY(userId, groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating User Project Table issue' . mysql_error());
+			die('Creating User Group Table issue' . mysql_error());
+		}
+	}
+	
+	function createMessageBoardTable($conn){
+		$sql = "DROP TABLE MessageBoard;";
+		mysql_query($sql, $conn);
+		$sql = "CREATE TABLE MessageBoard (groupId INT NOT NULL, userId INT NOT NULL, postDate DATE NOT NULL, messageID INT NOT NULL, message varchar(500), PRIMARY KEY(messageID));";
+		$retval = mysql_query($sql, $conn);
+		if(! $retval){
+			die('Creating Message Board Table issue' . mysql_error());
 		}
 	}
 
