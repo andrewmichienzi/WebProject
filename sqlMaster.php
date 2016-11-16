@@ -71,6 +71,16 @@
 			die('Creating Message Board Table issue' . mysql_error());
 		}
 	}
+	
+	function createUserScheduleTable($conn){
+		$sql = "DROP TABLE UserSchedule;";
+		mysql_query($sql, $conn);
+		$sql = "CREATE TABLE UserSchedule (userId INT NOT NULL, availability VARCHAR(500), PRIMARY KEY(userId))";
+		$retval = mysql_query($sql, $conn);
+		if(! $retval){
+			die('Creating Message Board Table issue' . mysql_error());
+		}
+	}
 
 	function printTableNames($conn){
 		$sql = "Select table_name from information_schema.tables;";
