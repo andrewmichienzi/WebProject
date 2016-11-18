@@ -15,50 +15,50 @@
 
 	function runSqlScripts($conn)
 	{
-		createUserTable($conn);
-		createProjectTable($conn);
-		//createTaskTable($conn);
-		//createUserGroupTable($conn);
+		createUsersTable($conn);
+		createGroupsTable($conn);
+		//createTasksTable($conn);
+		//createUserProjectsTable($conn);
 		//createMessageBoardTable($conn);
 	}	
 
-	function createUserTable($conn){
-		$sql = "DROP TABLE User;";
+	function createUsersTable($conn){
+		$sql = "DROP TABLE Users;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE User (userId INT NOT NULL, name varchar(25) NOT NULL, username varchar(25) NOT NULL, email varchar(50), phone varchar(10), PRIMARY KEY(userId));";
+		$sql = "CREATE TABLE Users (userId INT NOT NULL, name varchar(25) NOT NULL, username varchar(25) NOT NULL, email varchar(50), phone varchar(10), PRIMARY KEY(userId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating User Table issue' . mysql_error());
+			die('Creating Users Table issue' . mysql_error());
 		}
 	}
 	
-	function createProjectTable($conn){
-		$sql = "DROP TABLE Project;";
+	function createGroupsTable($conn){
+		$sql = "DROP TABLE Groups;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Project (projectId INT NOT NULL, name varchar(25) NOT NULL, course varchar(25), description varchar(100), createDate DATE NOT NULL, dueDate DATE, PRIMARY KEY (projectId));";
+		$sql = "CREATE TABLE Groups (projectId INT NOT NULL, name varchar(25) NOT NULL, course varchar(25), description varchar(100), createDate DATE NOT NULL, dueDate DATE, PRIMARY KEY (projectId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating Project Table issue' . mysql_error());
+			die('Creating Groups Table issue' . mysql_error());
 		}
 	}
 
-	function createTaskTable($conn){
-		$sql = "DROP TABLE Task;";
+	function createTasksTable($conn){
+		$sql = "DROP TABLE Tasks;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Task (taskId INT NOT NULL, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, groupId));";
+		$sql = "CREATE TABLE Tasks (taskId INT NOT NULL, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating Task Table issue' . mysql_error());
+			die('Creating Tasks Table issue' . mysql_error());
 		}
 	}
 	
-	function createUserProjectTable($conn){
-		$sql = "DROP TABLE UserProject;";
+	function createUserGroupsTable($conn){
+		$sql = "DROP TABLE UserGroups;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE UserProject (userId INT NOT NULL, projectId INT NOT NULL, PRIMARY KEY(userId, projectId));";
+		$sql = "CREATE TABLE UserGroups (userId INT NOT NULL, projectId INT NOT NULL, PRIMARY KEY(userId, projectId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating User Project Table issue' . mysql_error());
+			die('Creating User Groups Table issue' . mysql_error());
 		}
 	}
 	
