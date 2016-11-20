@@ -10,10 +10,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	
-	<script>
-		
-	</script>
 </head>
 <body>
 	<div id = "header">
@@ -25,11 +21,11 @@
 				<ul class="nav navbar-nav">
 					<li><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
 					<li><a id="currentProject" href="#">Project A</a></li>
-					<li class="active"><a id="messages" href="messages.html">Message Board</a></li>
+					<li><a id="messages" href="messages.html">Message Board</a></li>
 					<li><a id="schedule" href="schedules.html">Schedules</a></li>
 					<li><a id="tasks" href="tasks.html">Tasks</a></li>
 					<li><a id="groupMembers" href="groupMembers.html">Group Members</a></li>
-					<li><a id="user" href="userProfile.html" href="#">User Name</a></li>
+					<li class="active"><a id="user" href="userProfile.html" href="#">User Name</a></li>
 				</ul>	
 			</div>
 		</nav>
@@ -38,7 +34,33 @@
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
-			
+				<?php 
+					include '../databaseConnection.php';
+					// set userId from session varibles
+					$conn = getDBConnection();
+					$sql = "SELECT * FROM Users WHERE userId = " .$userId. ";";
+					$result = mysql_query($sql, $conn);
+					if($result == NULL) {
+						echo "User not found.";
+						return;
+					}
+					
+					while($row = mysql_fetch_array($result)) {
+						$user = row[1];
+						$username = row[2];
+						$email = row[3];
+						$phone = row[4];
+					}
+					
+					// print out user info
+					
+					$sql2 = "SELECT * FROM UserGroups WHERE userId = " .$userId. ";";
+					$result2 = mysql_query($sql2, $conn);
+					while($newrow = mysql_fetch_array($result2)) {
+						// print out groups
+					}
+					
+				?>
 			</div>
 		</div>
 	</div>

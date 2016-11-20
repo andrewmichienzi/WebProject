@@ -12,7 +12,29 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	
 	<script>
-		
+		function validateForm() {
+			var message = "";
+			var u = document.forms["profileForm"]["user"].value;
+			if(u == null || u == "") {
+				message += "<br>Name must be filled out.";
+			}
+			var p = document.forms["profileForm"]["phone"].value;
+			if(p == null || p == "") {
+				message += "<br>Phone number must be filled out.";
+			}
+			var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+			if(!p.value.match(phoneno)) {
+				message += "<br>Please enter a valid phone number.";
+			}
+			var e = document.forms["profileForm"]["email"].value;
+			if(e == null || e == "") {
+				message += "<br>Email must be filled out.";
+			}
+			document.getElementById("error").innerHTML = message;
+			if(message != "") {
+				return false;
+			}
+		}
 	</script>
 </head>
 <body>
@@ -38,7 +60,18 @@
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
-			
+				<div>
+				<form name="profileForm" action="updateUser.php" onsubmit="return validateForm()" method="post">
+					Name: <br>
+					<input type="text" name="name"><br>
+					Phone Number: <br>
+					<input type="text" name="phone"><br>
+					Email: <br>
+					<input type="text" name="email"><br>
+					<input type="submit" value="Submit">
+					<p id="error"></p>
+				</form>
+				</div>
 			</div>
 		</div>
 	</div>
