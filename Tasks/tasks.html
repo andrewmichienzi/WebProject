@@ -11,14 +11,51 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script>
-		function createTasks()
+		function createTask(taskId, groupId, name, userId, description)
 		{
-			var tasksDiv = document.getElementById("tasks");
-			
-			getAll("Task")
+			jQuery.ajax({
+    				type: "POST",
+    				url: '../sqlDataMaster.php',
+    				dataType: 'json',
+    				data: {functionname: 'addTask', arguments: [taskId, groupId, name, userId, description]},
+	
+	    			success: function (obj, textstatus) {
+	                		if( !('error' in obj) ) {
+						alert("Success");
+						var tasksDiv = document.getElementById("tasks");
+	                			tasksDiv.innerHTML = obj.result;
+	                		}
+	               			else {
+						alert("error");
+	      					console.log(obj.error);
+	                		}
+	       			}
+			});
+		}	
+		function test()
+		{
+			jQuery.ajax({
+    				type: "POST",
+    				url: '../sqlDataMaster.php',
+    				dataType: 'json',
+    				data: {functionname: 'Test'},
+	
+	    			success: function (obj, textstatus) {
+	                		if( !('error' in obj) ) {
+						alert("Success");
+						var tasksDiv = document.getElementById("tasks");
+	                			tasksDiv.innerHTML = obj.result;
+	                		}
+	               			else {
+						alert("error");
+	      					console.log(obj.error);
+	                		}
+	       			}
+			});
+
 		}
-		
-		getAll(table)
+
+		function getAll(table)
 		{
 			//Select * from {table}
 			var ajaxRequest;
@@ -69,5 +106,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<script>
+		createTask("5", "6", "TestTask2", "1", "This is a test of description");
+	</script>
 </body>
