@@ -49,7 +49,7 @@
 	function createUsersTable($conn){
 		$sql = "DROP TABLE Users;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Users (userId INT NOT NULL, name varchar(100) NOT NULL, username varchar(100) NOT NULL, email varchar(320), phone varchar(50), PRIMARY KEY(userId));";
+		$sql = "CREATE TABLE Users (userId INT NOT NULL AUTO_INCREMENT, name varchar(100) NOT NULL, username varchar(100) NOT NULL UNIQUE, email varchar(320), phone varchar(50), PRIMARY KEY(userId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Users Table issue:  ' . mysql_error());
@@ -59,7 +59,7 @@
 	function createGroupsTable($conn){
 		$sql = "DROP TABLE Groups;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Groups (groupId INT NOT NULL, name varchar(25) NOT NULL, course varchar(25), description varchar(100), createDate DATE NOT NULL, dueDate DATE, PRIMARY KEY (groupId));";
+		$sql = "CREATE TABLE Groups (groupId INT NOT NULL AUTO_INCREMENT, name varchar(25) NOT NULL UNIQUE, course varchar(25), description varchar(100), createDate DATE NOT NULL, dueDate DATE, PRIMARY KEY (groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Groups Table issue:  ' . mysql_error());
@@ -69,7 +69,7 @@
 	function createTasksTable($conn){
 		$sql = "DROP TABLE Tasks;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Tasks (taskId INT NOT NULL, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, groupId));";
+		$sql = "CREATE TABLE Tasks (taskId INT NOT NULL AUTO_INCREMENT, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Tasks Table issue:  ' . mysql_error());
@@ -89,7 +89,7 @@
 	function createMessageBoardTable($conn){
 		$sql = "DROP TABLE MessageBoard;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE MessageBoard (groupId INT NOT NULL, userId INT NOT NULL, postDate DATE NOT NULL, messageID INT NOT NULL, message varchar(500), PRIMARY KEY(messageID));";
+		$sql = "CREATE TABLE MessageBoard (groupId INT NOT NULL, userId INT NOT NULL, postDate DATE NOT NULL, messageID INT NOT NULL AUTO_INCREMENT, message varchar(500), PRIMARY KEY(messageID));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Message Board Table issue:  ' . mysql_error());
