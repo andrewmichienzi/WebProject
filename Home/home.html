@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
+		body {
+			background: url("../background.jpg");
+		}
+		#header {
+			margin-top: 2%;
+		}
+		.bottomMargin {
+			margin-bottom:1em;
+		}
+		#content {
+			padding:0;
+		}
+	</style>
+	<script>
+		$(document).ready(function () {
+			var userInfo;
+			//getSessionInfo(userInfo);
+			getGroupNames('admin');
+		});
+
+		function getSessionInfo(userInfo) {
+			$.ajax("getUserInformation.php")
+			.done(function(data) {
+				data = JSON.parse(data);
+				userInfo = data;
+				if(data.userVars == 'false') {
+					alert("no session info");
+					//window.location.href = "login.html";
+				} else if (data.groupVar == 'false') {
+					alert("userId: " + data.userId + " username: " + data.username + " name: " + data.name + 'no group id');
+				} else {
+					alert("userId: " + data.userId + " username: " + data.username + " name: " + data.name + " group id: " + data.currentGroupId);
+				}
+			});
+		}
+
+		function getGroupNames() {
+			var ary = {'0':"Group A", '1':"Group B", '2':"Group C", '3':"Group D", '4':"Group E"};
+			var row = $("<div class='row'>");
+			$("#container").append(row);
+			$.each(ary, function(index, value) {
+				if(index %2 == 0 && index !=0) {
+					row = $("<div class='row'>");
+					$("#container").append(row);
+				}
+				var groupButton = $(
+					  "<div class='buttonRow'>" 
+					+ 	"<div class='thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1'>"
+					+ 		"<a href='setGroupSessionVariable.php?groupId="+index+"'><h4>"+value+"</h4></a>"
+					+ 	"</div>"
+					+ "</div>");
+				if(index %2 == 1) {
+					groupButton.find(".thumbnail").addClass("col-sm-offset-2");
+				}		
+				row.append(groupButton);
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id = "header">
+		<div class="row">
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
+		</div>
+		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
+			<div class="nav navbar-nav">
+				<ul class="nav navbar-nav">
+					<li class="active"><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+					<li><a id="currentProject">Project A</a></li>
+					<li><a id="messages" href="messages.html">Message Board</a></li>
+					<li><a id="schedule" href="schedules.html">Schedules</a></li>
+					<li><a id="tasks" href="tasks.html">Tasks</a></li>
+					<li><a id="groupMembers" href="groupMembers.html">Group Members</a></li>
+					<li><a id="user" href="userProfile.html" href="#">User Name</a></li>
+				</ul>	
+			</div>
+		</nav>
+	</div>
+	
+	<div id="content" class=" col-xs-10 col-xs-offset-1">
+		<div class="panel panel-default">
+			<div id="contentBody" class="panel-body">
+			
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Create or Join a Group</h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1">
+								<a href="createGroup.html"><h4>Create a Group</h4></a>
+							</div>
+							<div class="thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-2">
+								<a href="joinGroup.html"><h4>Join a Group</h4></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>My Groups</h4>
+					</div>
+					<div id="container" class="panel-body">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>

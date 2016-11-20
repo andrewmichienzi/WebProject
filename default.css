@@ -1,0 +1,12 @@
+body {
+	background: url("background.jpg");
+}
+#header {
+	margin-top: 2%;
+}
+.bottomMargin {
+	margin-bottom:1em;
+}
+#content {
+	padding:0;
+}
