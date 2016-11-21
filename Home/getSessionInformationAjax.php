@@ -1,4 +1,5 @@
 <?php
+	require '../databaseConnection.php';
 	session_start();
 	$userInfo = array();
 	if(isset($_SESSION['username']) 
@@ -9,15 +10,13 @@
 			$userInfo['name'] = $_SESSION['name'];
 			$userInfo['userVars'] = 'true';
 	} else {
-		// TODO: Change to redirect
 		$userInfo['userVars'] = 'false';
 	}
 
 	if(isset($_SESSION['groupId'])) {
-		$userInfo['currentGroupId'] = $_SESSION['groupId'];
+		$userInfo['groupId'] = $_SESSION['groupId'];
 		$userInfo['groupVar'] = 'true';
 	} else {
-		// TODO: Change to redirect?
 		$userInfo['groupVar'] = 'false';
 	}
 	echo json_encode($userInfo);
