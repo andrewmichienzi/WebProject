@@ -11,7 +11,7 @@
 	mysql_select_db($dbname);
 	
 	runSqlScripts($conn);
-//	printTableNames($conn);	
+	//printTableNames($conn);	
 	addSampleData($conn);
 	echo "success";
 	function runSqlScripts($conn)
@@ -25,6 +25,7 @@
 
 	function addSampleData($conn)
 	{
+<<<<<<< HEAD
 		$testUser = array("0", "Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
 		addUser($conn, $testUser);
 		$testUser = array("1", "Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
@@ -44,11 +45,50 @@
 		$testTask = array("4", "2", "Task 1", "0", "Test Description");
 		addTask($conn, $testTask);
     		printUsers($conn);
+=======
+		$testUser0 = array("Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
+		addUser($conn, $testUser0);
+		$testUser1 = array("Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
+		addUser($conn, $testUser1);
+		$testUser2 = array("Matt Escalante", "escalanm", "escalanm@mail.gvsu.edu", "1 (234)-567-8901");
+		addUser($conn, $testUser2);
+		$testUser3 = array("Molly Alger", "algermo", "algermo@mail.gvsu.edu", "345.678.9012");
+		addUser($conn, $testUser3);
+
+		$testGroup0 = array("Cool Homies", "AWESOME101", "A group where only awesome people are invited", "20161120", "NULL", "1");
+		addGroup($conn, $testGroup0);
+		$testGroup1 = array("Lame Lamies", "LAME98", "must be hella lame", "20150309", "20161203", "1");
+		addGroup($conn, $testGroup1);
+		$testGroup2 = array("Group A", "GRA", "Group A group description", "20150309", "20161203", "2");
+		addGroup($conn, $testGroup2);
+		$testGroup3 = array("Group B", "GRB", "Group B group description", "20150309", "20161203", "2");
+		addGroup($conn, $testGroup3);
+		$testGroup4 = array("Group C", "GRC", "Group C group description", "20150309", "20161203", "2");
+		addGroup($conn, $testGroup4);
+		$testGroup5 = array("Group D", "GRD", "Group D group description", "20150309", "20161203", "2");
+		addGroup($conn, $testGroup5);
+		$testGroup6 = array("Group E", "GRE", "Group E group description", "20150309", "20161203", "2");
+		addGroup($conn, $testGroup6);
+		
+		$addToGroup1 = array("1", "1");
+		addUserToGroup($conn, $testGroup1);
+		$addToGroup2 = array("2", "1");
+		addUserToGroup($conn, $addToGroup2);
+		$addToGroup3 = array("3", "1");
+		addUserToGroup($conn, $addToGroup3);
+		$addToGroup4 = array("4", "1");
+		addUserToGroup($conn, $addToGroup4);
+
+		$testTask1 = array("4", "2", "Task 1", "NULL", "Test Description");
+		addTask($conn, $testTask1);
+    	
+		printTables($conn);
+>>>>>>> f6f0e9836ee7fafd53cc3fe2eda857718b5d5c54
 	}
 
 	function createUsersTable($conn){
 		$sql = "DROP TABLE Users;";
-		mysql_query($sql, $conn);
+		$retval = mysql_query($sql, $conn);
 		$sql = "CREATE TABLE Users (userId INT NOT NULL AUTO_INCREMENT, name varchar(100) NOT NULL, username varchar(100) NOT NULL UNIQUE, email varchar(320), phone varchar(50), PRIMARY KEY(userId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
@@ -78,7 +118,10 @@
 	
 	function createUserGroupsTable($conn){
 		$sql = "DROP TABLE UserGroups;";
-		mysql_query($sql, $conn);
+		$retVal = mysql_query($sql, $conn);
+		if(!retval) {
+			die("Failure to drop table");
+		}
 		$sql = "CREATE TABLE UserGroups (userId INT NOT NULL, groupId INT NOT NULL, PRIMARY KEY(userId, groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
@@ -118,13 +161,12 @@
 	function addUser($conn, $args){
 		/*
 			Args
-				0 userId
-				1 name
-				2 username
-				3 email
-				4 phone
+				0 name
+				1 username
+				2 email
+				3 phone
 		*/
-		$sql = "INSERT INTO Users (userid, name, username, email, phone) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', '" . $args[4] . "');";	
+		$sql = "INSERT INTO Users (name, username, email, phone) VALUES ('".$args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "');";	
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Addng User issue:  ' . mysql_error());
@@ -134,13 +176,12 @@
 	function addTask($conn, $args){
 		/*
 			Args
-				0 taskId
-				1 groupId
-				2 name
-				3 userId
-				4 descripttion
+				0 groupId
+				1 name
+				2 userId
+				3 descripttion
 		*/
-		$sql = "INSERT INTO Tasks (taskId, groupId, name, userId, description) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', '" . $args[4] . "');";	
+		$sql = "INSERT INTO Tasks ( groupId, name, userId, description) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "');";	
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding Task Issue:  ' . mysql_error());
@@ -151,20 +192,22 @@
 	{
 		/*
 			Args
-				0 groupId
-				1 name
-				2 course
-				3 description
-				4 createDate
-				5 dueDate
-				6 userId who created Date
+				0 name
+				1 course
+				2 description
+				3 createDate
+				4 dueDate
+				5 userId who created Date
 		*/
-		$sql = "INSERT INTO Groups (groupId, name, course, description, createDate, dueDate) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', '" . $args[4] . "', '" . $ags[5]. "');";	
+		$sql = "INSERT INTO Groups (name, course, description, createDate, dueDate) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', '" . $args[4] . "');";	
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding Group to Groups Table issue:  ' . mysql_error());
 		}
-		$newArgs = array($args[0], $args[6]);
+		$sql = "SELECT groupId FROM Groups WHERE name = '".$args[0]."';";
+		$retVal = mysql_query($sql, $conn);
+		$result = mysql_fetch_array($retVal);
+		$newArgs = array($args[5], $result['groupId']);
 		addUserToGroup($conn, $newArgs);
 	}
 	
@@ -174,22 +217,36 @@
 			Adding user and group to group table
 			
 			Args
-				0 groupId
-				1 userId
+				0 userId
+				1 groupId
 		*/
-		$sql = "INSERT INTO UserGroups (groupId, userId) VALUES ('" . $args[0] . "', '" . $args[1] . "');";	
+		$sql = "INSERT INTO UserGroups (userId, groupId) VALUES ('" . $args[0] . "', '" . $args[1] . "');";	
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding to UserGroups Table issue:  ' . mysql_error());
 		}
 	}
 	
-	function printUsers($conn){
+	function printTables($conn){
 		$sql = "Select * from Users;";
 		$retVal = mysql_query($sql, $conn);
 		echo 'Current Users:<br>';
 		while($row = mysql_fetch_array($retVal)){
-			echo $row['username'];
+			echo "UserId: ".$row['userId']." Username: ".$row['username']."<br>";
+		}
+		
+		$sql = "Select * from UserGroups;";
+		$retVal = mysql_query($sql, $conn);
+		echo 'Current UserGroups:<br>';
+		while($row = mysql_fetch_array($retVal)){
+			echo "UserId: ".$row['userId']." GroupId: ".$row['groupId'].'<br>';
+		}
+	
+		$sql = "Select * from Groups;";
+		$retVal = mysql_query($sql, $conn);
+		echo 'Current Groups:<br>';
+		while($row = mysql_fetch_array($retVal)){
+			echo "GroupId: ".$row['groupId']." GroupName: ".$row['name'];
 			echo '<br>';
 		}
 	}
