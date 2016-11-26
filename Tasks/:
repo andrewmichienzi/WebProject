@@ -1,7 +1,0 @@
-<?php
-	include "../databaseConnection.php";
-	$conn = getDBConnection();
-	functionId = $_POST['functionId'];
-	echo functionId;
-
-?>
