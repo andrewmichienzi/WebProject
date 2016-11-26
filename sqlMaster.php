@@ -41,7 +41,7 @@
 		addUserToGroup($conn, $addToGroup);
 		$addToGroup = array("1", "3");
 		addUserToGroup($conn, $addToGroup);
-		$testTask = array("4", "2", "Task 1", "NULL", "Test Description");
+		$testTask = array("4", "2", "Task 1", "0", "Test Description");
 		addTask($conn, $testTask);
     		printUsers($conn);
 	}
