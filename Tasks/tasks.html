@@ -14,8 +14,8 @@
 		function createTask()
 		{
 			$.ajax({
-    				type: "GET",
-    				data: {functionId: "0"},
+    				type: "POST",
+    				data: {functionId: 0},
     				url: 'sqlTasks.php'
 	
 	    			}).done(function (data) {
@@ -25,15 +25,17 @@
 	                			tasksDiv.innerHTML = obj.result;*/
 	                		}
 	               			else {
-						alert("Success!");
+						//alert("Success!");
+	                			var result = JSON.parse(data);
 						alert(data);
-	                		}
+					}
 	       			}
 			);
+		//alert("Hello");
 		}	
 		function test()
 		{
-			jQuery.ajax({
+			$.ajax({
     				type: "POST",
     				url: '../sqlDataMaster.php',
     				dataType: 'json',

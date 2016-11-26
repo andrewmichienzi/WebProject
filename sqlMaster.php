@@ -25,7 +25,7 @@
 
 	function addSampleData($conn)
 	{
-<<<<<<< HEAD
+
 		$testUser = array("0", "Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
 		addUser($conn, $testUser);
 		$testUser = array("1", "Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
@@ -42,10 +42,12 @@
 		addUserToGroup($conn, $addToGroup);
 		$addToGroup = array("1", "3");
 		addUserToGroup($conn, $addToGroup);
-		$testTask = array("4", "2", "Task 1", "0", "Test Description");
+		$testTask = array("0", "Task1", "1","Test Description");
 		addTask($conn, $testTask);
-    		printUsers($conn);
-=======
+		$testTask = array("0", "Task2", "1","Test Description 2");
+		addTask($conn, $testTask);
+    		//printUsers($conn);
+/*
 		$testUser0 = array("Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
 		addUser($conn, $testUser0);
 		$testUser1 = array("Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
@@ -79,12 +81,11 @@
 		$addToGroup4 = array("4", "1");
 		addUserToGroup($conn, $addToGroup4);
 
-		$testTask1 = array("4", "2", "Task 1", "NULL", "Test Description");
+		$testTask1 = array("4", "2", "Task 1", "Test Description");
 		addTask($conn, $testTask1);
     	
 		printTables($conn);
->>>>>>> f6f0e9836ee7fafd53cc3fe2eda857718b5d5c54
-	}
+*/	}
 
 	function createUsersTable($conn){
 		$sql = "DROP TABLE Users;";
