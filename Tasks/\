@@ -54,28 +54,8 @@
 		function addTask()
 		{
 			var taskName = document.getElementById("taskName");
-			if(taskName.value == "")
-				return;
-			var taskDescription = document.getElementById("taskDescription");
-			var groupId = document.getElementById("groupId");
-		
-			$.ajax({
-    				type: "POST",
-    				data: {functionId: 2, taskName: taskName.value, taskDescription: taskDescription.value, groupId: groupId.value},
-    				url: 'sqlTasks.php'
-	
-	    			}).done(function (data) {
-	                		if(data == "failure") {
-						alert("Failure");
-	                		}
-	               			else {
-						alert("Success!");
-//						createTask();
-					}
-	       			}
-			);
+			alert(taskName);
 		}
-	
 		function test()
 		{
 			$.ajax({
@@ -146,7 +126,7 @@
 				</div>
 		<!-- Add Task -->
 				<div id="addTask();">
-				<form action="" onsubmit="addTask()">
+				<form action="javascript:addTask();">
 					Task: <input type="text" name="taskName" id="taskName"><br>
 					Description: <input type="text" name="taskDescription" id="taskDescription"><br>
 					Group: <div id="groupNames"></div><br>
