@@ -10,10 +10,10 @@
 
 	mysql_select_db($dbname);
 	
-	runSqlScripts($conn);
-	//printTableNames($conn);	
+	runSqlScripts($conn);	
 	addSampleData($conn);
-	echo "success";
+	echo "<br>SUCCESS";
+
 	function runSqlScripts($conn)
 	{
 		createUsersTable($conn);
@@ -25,29 +25,6 @@
 
 	function addSampleData($conn)
 	{
-
-		$testUser = array("0", "Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
-		addUser($conn, $testUser);
-		$testUser = array("1", "Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
-		addUser($conn, $testUser);
-		$testUser = array("2", "Matt Escalante", "escalanm", "escalanm@mail.gvsu.edu", "1 (234)-567-8901");
-		addUser($conn, $testUser);
-		$testUser = array("3", "Molly Alger", "algermo", "algermo@mail.gvsu.edu", "345.678.9012");
-		addUser($conn, $testUser);
-		$testGroup = array("0", "Cool Homies", "AWESOME101", "A group where only awesome people are invited", "20161120", "NULL", "0");
-		addGroup($conn, $testGroup);
-		$testGroup = array("1", "Lame Lamies", "LAME98", "must be hella lame", "20150309", "20161203", "1");
-		addGroup($conn, $testGroup);
-		$addToGroup = array("1", "2");
-		addUserToGroup($conn, $addToGroup);
-		$addToGroup = array("1", "3");
-		addUserToGroup($conn, $addToGroup);
-		$testTask = array("0", "Task1", "1","Test Description");
-		addTask($conn, $testTask);
-		$testTask = array("0", "Task2", "1","Test Description 2");
-		addTask($conn, $testTask);
-    		//printUsers($conn);
-/*
 		$testUser0 = array("Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
 		addUser($conn, $testUser0);
 		$testUser1 = array("Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
@@ -81,11 +58,11 @@
 		$addToGroup4 = array("4", "1");
 		addUserToGroup($conn, $addToGroup4);
 
-		$testTask1 = array("4", "2", "Task 1", "Test Description");
+		$testTask1 = array("4", "2", "Task 1", "NULL", "Test Description");
 		addTask($conn, $testTask1);
     	
 		printTables($conn);
-*/	}
+	}
 
 	function createUsersTable($conn){
 		$sql = "DROP TABLE Users;";
@@ -238,17 +215,18 @@
 		
 		$sql = "Select * from UserGroups;";
 		$retVal = mysql_query($sql, $conn);
-		echo 'Current UserGroups:<br>';
+		echo '<br>Current UserGroups:<br>';
 		while($row = mysql_fetch_array($retVal)){
 			echo "UserId: ".$row['userId']." GroupId: ".$row['groupId'].'<br>';
 		}
 	
 		$sql = "Select * from Groups;";
 		$retVal = mysql_query($sql, $conn);
-		echo 'Current Groups:<br>';
+		echo '<br>Current Groups:<br>';
 		while($row = mysql_fetch_array($retVal)){
 			echo "GroupId: ".$row['groupId']." GroupName: ".$row['name'];
 			echo '<br>';
 		}
 	}
 ?>
+
