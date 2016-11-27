@@ -1,14 +1,20 @@
 <?php
-
+	
+	require '../checkSessionInformation.php';
+    //checkSessionInformation();
 	session_start();
 	
 	include '../databaseConnection.php';
 	
 	$conn = getDBConnection();
 	
-	$groupId = $_SESSION['groupId'];
-	$userId = $_SESSION['userId'];
-	$user = $_SESSION['user'];
+	//$groupId = $_SESSION['groupId'];
+	//$userId = $_SESSION['userId'];
+	//$user = $_SESSION['user'];
+	
+	$groupId = 1;
+	$userId = 4;
+	$user = "algermo";
 	
 	$type = $_POST['type'];
 	$date = $_POST['date'];
@@ -61,6 +67,7 @@
 		// auto increment messageID
 		$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('".$groupId."', '".$userId."', '".$date."', '".$message."');";
 		mysql_query($sql, $conn);
+		showPost($user, $date, $message);
 		
 	}
 	

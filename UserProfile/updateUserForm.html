@@ -4,8 +4,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<!-- Site-wide css -->
-	<link rel="stylesheet" href="default.css">
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
@@ -46,25 +44,35 @@
 		if(p == null || p == "") {
 			message += "<br>Phone number must be filled out.";
 		}
-		var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-		if(!p.value.match(phoneno)) {
-			message += "<br>Please enter a valid phone number.";
-		}
+		//var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+		//if(!p.value.match(phoneno)) {
+		//	message += "<br>Please enter a valid phone number.";
+		//}
 		var e = document.forms["profileForm"]["email"].value;
 		if(e == null || e == "") {
 			message += "<br>Email must be filled out.";
 		}
 		document.getElementById("error").innerHTML = message;
-		if(message != "") {
+		if(message == "") {
 			$.ajax({
 				type:"POST",
-				url:"updateUser.php",
+				url:"./updateUser.php",
 				data:{name:$("#name").val(),email:$("#email").val(),phone:$("#phone").val()}
 			}).done(function(data) {
-				alert(JSON.parse(data));
-				window.location.href = "userProfile.html";
+				window.location.href = "./userProfile.html";
 			});
 		}	
+	}
+	
+	function submitUpdate() {
+		$.ajax({
+				type:"POST",
+				url:"./updateUser.php",
+				data:{name:$("#name").val(),email:$("#email").val(),phone:$("#phone").val()}
+			}).done(function(data) {
+				window.location.href = "./userProfile.html";
+			});
+		
 	}
 	</script>
 </head>
@@ -92,7 +100,7 @@
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
 				<div>
-				<form name="profileForm" onsubmit="return validateForm()" method="post">
+				<form name="profileForm" onsubmit="submitUpdate()" method="post">
 					Name: <br>
 					<input type="text" name="name" id="name"><br>
 					Phone Number: <br>
