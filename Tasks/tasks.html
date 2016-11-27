@@ -23,14 +23,59 @@
 						alert("Failure");
 	                		}
 	               			else {
-						alert("Success!");
+					//	alert("Success!");
 						$("#taskList").append(data);
 						
 					}
 	       			}
 			);
 		//alert("Hello");
+		}
+		function addGroups()
+		{
+			$.ajax({
+    				type: "POST",
+    				data: {functionId: 1},
+    				url: 'sqlTasks.php'
+	
+	    			}).done(function (data) {
+	                		if(data == "failure") {
+						alert("Failure");
+	                		}
+	               			else {
+					//	alert("Success!");
+						$("#groupNames").append(data);
+					//alert(data);	
+					}
+	       			}
+			);
 		}	
+	
+		function addTask()
+		{
+			var taskName = document.getElementById("taskName");
+			if(taskName.value == "")
+				return;
+			var taskDescription = document.getElementById("taskDescription");
+			var groupId = document.getElementById("groupId");
+		
+			$.ajax({
+    				type: "POST",
+    				data: {functionId: 2, taskName: taskName.value, taskDescription: taskDescription.value, groupId: groupId.value},
+    				url: 'sqlTasks.php'
+	
+	    			}).done(function (data) {
+	                		if(data == "failure") {
+						alert("Failure");
+	                		}
+	               			else {
+						alert("Success!");
+//						createTask();
+					}
+	       			}
+			);
+		}
+	
 		function test()
 		{
 			$.ajax({
@@ -98,11 +143,21 @@
 				</div>
 		<!-- Tasks -->
 				<div id="taskList">
+				</div>
+		<!-- Add Task -->
+				<div id="addTask();">
+				<form action="" onsubmit="addTask()">
+					Task: <input type="text" name="taskName" id="taskName"><br>
+					Description: <input type="text" name="taskDescription" id="taskDescription"><br>
+					Group: <div id="groupNames"></div><br>
+					<input type="submit" value="Add Task">
+				</form>
 				</div>	
 			</div>
 		</div>
 	</div>
 	<script>
 		createTask();
+		addGroups();
 	</script>
 </body>
