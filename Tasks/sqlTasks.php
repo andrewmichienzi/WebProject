@@ -10,8 +10,23 @@
 	function printTasks($conn){
 		$sql = "Select * from Tasks;";
 		$retVal = mysql_query($sql, $conn);
+//		echo json_encode(mysql_fetch_array($retVal));
+		echo "<table id=taskTable>
+		<tr>
+		<th>groupId</th>
+		<th>name</th>
+		<th>userId</th>
+		<th>description</th>
+		</tr>";
+			
 		while($row = mysql_fetch_array($retVal)){
-			echo json_encode($row);
-		}
+			echo "<tr>";
+			echo "<td>". $row['groupId'] . "</td>";
+			echo "<td>". $row['name'] . "</td>";
+			echo "<td>". $row['userId'] . "</td>";
+			echo "<td>". $row['description'] . "</td>";
+			echo "</tr>";
+		}	
+		echo "</table>";
 	}
 ?>

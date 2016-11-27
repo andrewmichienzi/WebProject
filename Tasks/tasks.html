@@ -21,13 +21,11 @@
 	    			}).done(function (data) {
 	                		if(data == "failure") {
 						alert("Failure");
-						/*var tasksDiv = document.getElementById("tasks");
-	                			tasksDiv.innerHTML = obj.result;*/
 	                		}
 	               			else {
-						//alert("Success!");
-	                			var result = JSON.parse(data);
-						alert(data);
+						alert("Success!");
+						$("#taskList").append(data);
+						
 					}
 	       			}
 			);
@@ -44,8 +42,6 @@
 	    			success: function (obj, textstatus) {
 	                		if( !('error' in obj) ) {
 						alert("Success");
-						var tasksDiv = document.getElementById("tasks");
-	                			tasksDiv.innerHTML = obj.result;
 	                		}
 	               			else {
 						alert("error");
@@ -100,9 +96,8 @@
 					<input type="submit" value="Sort">
 				</form>
 				</div>
-		
 		<!-- Tasks -->
-				<div id="tasks">
+				<div id="taskList">
 				</div>	
 			</div>
 		</div>
