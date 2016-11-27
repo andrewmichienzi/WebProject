@@ -12,10 +12,27 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	
 	<script>
-		
+	$(document).ready(function(){
+	$.ajax({
+			type:"POST",
+			url:"messageBoard.php",
+			data:{type: "displayPost"}
+			}).done(function(data) {
+				var postData = JSON.parse(data);
+				$("#user").val(postData.user);
+				$("#date").val(postData.date);
+				$("#message").val(postData.message);
+			});
+	});
+	
+	$("#makePost").click(function(){
+		window.location.href = "postMessage.html";	
+	});
 	</script>
 </head>
 <body>
+
+
 	<div id = "header">
 		<div class="row">
 				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="logo.png"/>
@@ -38,8 +55,12 @@
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
+			<h3>Message Board</h3>
+			<button id="makePost">Make Post</button>
 				<div id="boardPost">
-				<div class="content"></div>	
+				<p id="user"></p>
+				<p id="date"></p>
+				<p id="message"></p>
 				</div>
 			</div>
 		</div>
