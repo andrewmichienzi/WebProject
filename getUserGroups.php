@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require '../databaseConnection.php';
+	require './databaseConnection.php';
 	$conn = getDBConnection();
 	$sql = "SELECT g.groupId, g.name FROM UserGroups AS ug, Groups AS g WHERE ug.userId = ".$_SESSION['userId']." AND g.groupId = ug.groupId;";
 	$result = mysql_query($sql, $conn);
