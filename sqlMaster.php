@@ -56,6 +56,7 @@
 		$addToGroup3 = array("3", "1");
 		addUserToGroup($conn, $addToGroup3);
 		$addToGroup4 = array("4", "1");
+		addUserToGroup($conn, $addToGroup4);
 
 		$testTask1 = array("1", "Task1", "0", "Test Description");
 		addTask($conn, $testTask1);

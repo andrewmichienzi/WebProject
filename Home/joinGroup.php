@@ -5,7 +5,7 @@
 	$conn = getDBConnection();
 	$sql = "SELECT groupId, name FROM Groups WHERE UPPER(name) = UPPER('".$_POST['groupName']."');";
 	$result = mysql_query($sql, $conn);
-	if(!$result || mysql_num_rows() == 0) {
+	if(!$result) {
 		echo 'NOTFOUND';
 	} else {
 		$record = mysql_fetch_array($result);
