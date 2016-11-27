@@ -4,8 +4,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<!-- Site-wide css -->
-	<link rel="stylesheet" href="default.css">
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
@@ -29,12 +27,17 @@
 		$.ajax("getUserProfileInfo.php")
 			.done(function(data) {
 					var userData = JSON.parse(data);
-					$("#name").val(userData.name);
-					$("#phone").val(userData.phone);
-					$("#email").val(userData.email);
+					$("#name").text(userData.name);
+					$("#phone").text(userData.phone);
+					$("#email").text(userData.email);
 				}
 			)
 	});
+	
+	function update(){
+		window.location.href = "updateUserForm.html";	
+	}
+
 	</script>
 </head>
 <body>
@@ -64,6 +67,7 @@
 				<p id="phone"></p>
 				<p id="email"></p>
 				<p id="groups"></p>
+				<button id="update" onclick="update()">Update</button>
 			</div>
 		</div>
 	</div>

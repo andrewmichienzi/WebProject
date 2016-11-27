@@ -1,12 +1,16 @@
 <?php
 
 	include '../databaseConnection.php';
+	
+	require '../checkSessionInformation.php';
+    //checkSessionInformation();
 	session_start();
 	$conn = getDBConnection();
 	
 	$userData = array();
 	
-	$userId = $_SESSION['userId'];
+	//$userId = $_SESSION['userId'];
+	$userId = 4;
 	$sql = "SELECT * FROM Users WHERE userId ='".$userId."';";
 	$result = mysql_query($sql, $conn);
 	
