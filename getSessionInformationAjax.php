@@ -16,6 +16,7 @@
 
 	if(isset($_SESSION['groupId'])) {
 		$userInfo['groupId'] = $_SESSION['groupId'];
+		$userInfo['groupName'] = $_SESSION['groupName'];
 		$userInfo['groupVar'] = 'true';
 	} else {
 		$userInfo['groupVar'] = 'false';
