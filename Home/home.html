@@ -43,7 +43,7 @@
 		}
 
 		function setGroupNames(userInfo) {
-			$.ajax("getUserGroups.php")
+			$.ajax("../getUserGroups.php")
 			.done(function (data) {
 				var obj = JSON.parse(data);
 				var row = $("<div class='row'>");
