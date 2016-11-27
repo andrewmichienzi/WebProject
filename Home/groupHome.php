@@ -60,9 +60,9 @@
 					<div class="panel-body">
 						<div class="row">
 							<?php 
-								session_start();
-								require '../databaseConnection.php';
-								$sql = "SELECT * FROM Groups WHERE groupId = ".$_SESSION['groupId'].";";
+								//session_start();
+								//require '../databaseConnection.php';
+								//$sql = "SELECT * FROM Groups WHERE groupId = ".$_SESSION['groupId'].";";
 								 
 								
 
