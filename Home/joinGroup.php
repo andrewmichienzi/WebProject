@@ -1,21 +1,22 @@
 <?php 
 	session_start();
 
-	include "../databaseConnection.php";
+	require "../databaseConnection.php";
 	$conn = getDBConnection();
-	$sql = "SELECT groupId FROM Groups WHERE name = " + $_POST['groupName'] + ";";
+	$sql = "SELECT groupId, name FROM Groups WHERE name = '".$_POST['groupName']."';";
 	$result = mysql_query($sql, $conn);
-	if(mysql_num_rows($result) == 0) {
-		echo 'notFound';
+	if(!$result) {
+		echo 'NOTFOUND';
 	} else {
 		$record = mysql_fetch_array($result);
-		$sql = "INSERT INTO UserGroups (userId, groupId) VALUES ( '".$_POST['userId']."' , '" . $record['groupId']."' );";
-		$result = mysql_query($sql, $conn);
-		if(!$result) {
+		$sql = "INSERT INTO UserGroups (userId, groupId) VALUES ( UPPER(".$_SESSION['userId'].") , UPPER('" . $record['groupId']."') );";
+		$insertresult = mysql_query($sql, $conn);
+		if(!$insertresult) {
 			echo "ERROR";
 		}  else {
-			echo $record['groupId'];
+			$_SESSION['groupId'] = $record['groupId'];
+			$_SESSION['groupName'] = $record['name'];
+			echo 'SUCCESS';
 		}
-		
 	}
 ?>

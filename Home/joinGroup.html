@@ -26,43 +26,37 @@
 		$(document).ready(function () {
 			var userInfo;
 			getSessionInfo(userInfo);
-			getGroupNames('admin');
-			$("form").attr("action", "joinGroup.php?userId="+userInfo.userId);
 			$("#button").click(function(event) {
 				event.preventDefault();
 				if($("#groupName").val() == "" || $("#groupName").val() == null) {
 					alert("Please enter a group name.");
 				} else {
-					$.ajax(
-						type: "GET",
-						url:"checkGroupName.php",
-						data: {groupName: $("#groupName").val(), userId: userInfo.userId}
-					).done(function(data) {
-						if(data == "notFound") {
-							alert("Please check your spelling. The group " + $('#groupName').val()+" was not found.");
-						} else if (data == "ERROR" {
-							alert("There was a problem joining the group. Please try again later.");
+					$.ajax({
+						type: 'POST',
+						data: {groupName:$('#groupName').val()},
+						url: 'joinGroup.php'						
+					}).done(function (data) {
+						if(data == "NOTFOUND") {
+							alert("The group " + $('#groupName').val() + " was not found. Please double check the group name.");
+						} else if (data == "ERROR") {
+							alert('There was an error adding you to the group. Please try again later.');
 						} else {
-							window.location.href = "setGroupSessionVariable.php?groupId="+data;				
+							window.location.href = '../MessageBoard/messages.html';
 						}
 					});
 				}
 			});
 		});
 
-		// TODO: change to redirect?
 		function getSessionInfo(userInfo) {
-			$.ajax("getUserInformation.php")
+			$.ajax("../getSessionInformationAjax.php")
 			.done(function(data) {
 				data = JSON.parse(data);
-				userInfo = data;
 				if(data.userVars == 'false') {
-					alert("no session info");
-					window.location.href = "login.html";
-				} else if (data.groupVar == 'false') {
-					alert("userId: " + data.userId + " username: " + data.username + " name: " + data.name + 'no group id');
+					window.location.href = "../login.html";
 				} else {
-					alert("userId: " + data.userId + " username: " + data.username + " name: " + data.name + " group id: " + data.currentGroupId);
+					userInfo = data;
+					$('#user').text(userInfo.name);
 				}
 			});
 		}
@@ -74,17 +68,13 @@
 				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
-			<div class="nav navbar-nav">
-				<ul class="nav navbar-nav">
-					<li class="active"><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
-					<li><a id="currentProject">Project A</a></li>
-					<li><a id="messages" href="messages.html">Message Board</a></li>
-					<li><a id="schedule" href="schedules.html">Schedules</a></li>
-					<li><a id="tasks" href="tasks.html">Tasks</a></li>
-					<li><a id="groupMembers" href="groupMembers.html">Group Members</a></li>
-					<li><a id="user" href="userProfile.html" href="#">User Name</a></li>
-				</ul>	
-			</div>
+			<ul class="nav navbar-nav">
+				<li class="active"><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+			</ul>	
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="user" href="./UserProfile/userProfile.html"></a></li>
+				<li><a id="signout" href="../signout.php">Sign Out</a></li>
+			</ul>
 		</nav>
 	</div>
 	
@@ -96,7 +86,7 @@
 						<h4>Join a Group</h4>
 					</div>
 					<div id="container" class="panel-body">
-						<form class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3" method="POST">
+						<form class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3" action="joinGroup.php" method="POST">
 							<div class="form-group">
 								<label for="groupName">Group Name</label>
 								<input type="text" class="form-control" id="groupName" name="groupName" placeholder="Group Name">

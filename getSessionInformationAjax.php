@@ -1,6 +1,7 @@
 <?php
-	require '../databaseConnection.php';
 	session_start();
+	require 'databaseConnection.php';
+	
 	$userInfo = array();
 	if(isset($_SESSION['username']) 
 		&& isset($_SESSION['userId'])
@@ -10,7 +11,7 @@
 			$userInfo['name'] = $_SESSION['name'];
 			$userInfo['userVars'] = 'true';
 	} else {
-		$userInfo['userVars'] = 'false';
+			$userInfo['userVars'] = 'false';
 	}
 
 	if(isset($_SESSION['groupId'])) {

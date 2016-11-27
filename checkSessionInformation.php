@@ -12,7 +12,7 @@
 			// Check if the group id is set
 			} else if(!(isset($_SESSION['groupId']))) {
 				session_regenerate_id(true);
-				header("Location: ../Home/home.html");
+				header("Location: ./Home/home.html");
 				exit();
 			} 
 		}

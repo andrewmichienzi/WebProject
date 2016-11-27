@@ -46,7 +46,7 @@
 		addGroup($conn, $testGroup4);
 		$testGroup5 = array("Group D", "GRD", "Group D group description", "20150309", "20161203", "2");
 		addGroup($conn, $testGroup5);
-		$testGroup6 = array("Group E", "GRE", "Group E group description", "20150309", "20161203", "2");
+		$testGroup6 = array("Group E", "GRE", "Group E group description", "20150309", "20161203", "1");
 		addGroup($conn, $testGroup6);
 		
 		$addToGroup1 = array("1", "1");
@@ -56,7 +56,6 @@
 		$addToGroup3 = array("3", "1");
 		addUserToGroup($conn, $addToGroup3);
 		$addToGroup4 = array("4", "1");
-		addUserToGroup($conn, $addToGroup4);
 
 		$testTask1 = array("4", "2", "Task 1", "NULL", "Test Description");
 		addTask($conn, $testTask1);
