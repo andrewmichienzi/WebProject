@@ -126,6 +126,16 @@
 		}
 	}
 
+	function createUserScheduleTable($conn){
+		$sql = "DROP TABLE MessageBoard;";
+		mysql_query($sql, $conn);
+		$sql = "CREATE TABLE UserSchedule (userId INT NOT NULL, availability VARCHAR(250), PRIMARY KEY(userId));";
+		$retval = mysql_query($sql, $conn);
+		if(! $retval){
+			die('Creating Message Board Table issue' . mysql_error());
+		}
+	}
+
 	function printTableNames($conn){
 		$sql = "Select table_name from information_schema.tables;";
 		$retVal = mysql_query($sql, $conn);
