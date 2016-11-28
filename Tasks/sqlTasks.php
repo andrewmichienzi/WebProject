@@ -3,6 +3,7 @@
 //	require '../sqlMaster.php';
 	$conn = getDBConnection();
 	$functionId = $_POST['functionId'];
+	$GLOBALS['userId'] = 1;
 	if ($functionId == 0)
 	{
 		getTasks($conn);
@@ -17,15 +18,32 @@
 		$taskName = $_POST['taskName'];
 		$taskDescription = $_POST['taskDescription'];
 		$groupId = $_POST['groupId'];
-		$userId = 0;
-		$args = array($groupId, $taskName, $userId, $taskDescription);
+		$args = array($groupId, $taskName, $GLOBALS['userId'], $taskDescription);
 		addTask($conn, $args);
+	}
+		
+	if($functionId == 4){
+		getOrderBy($conn);
 	}	
 
 	function getTasks($conn){
 //		$sql = "Select * from Tasks;";
-		$userId = 0;
-		$sql = "Select g.name, g.course, t.name, t.description from Tasks as t left join Groups as g on g.groupId = t.groupId where userId =".$userId.";";
+		createTaskColumns($conn);
+		$columnSql = "Select columnName from TaskColumns;";
+		$columnRet = mysql_query($columnSql, $conn);
+		$sql = "Select ";
+		while($row = mysql_fetch_array($columnRet))
+		{
+			$sql.= $row['columnName'] . ", ";
+		}	
+		$sql = substr($sql, 0, -2);
+		$sql .= " from Tasks as t left join Groups as g on g.groupId = t.groupId where t.userId = ".$GLOBALS['userId'];
+		$orderBy = $_POST['orderBy'];
+		if($orderBy != "")
+		{
+			$sql .= " ORDER BY " . $orderBy;
+		}
+		$sql .= ";";
 		$retVal = mysql_query($sql, $conn);
 //		echo json_encode(mysql_fetch_array($retVal));
 		echo "<table id=taskTable>
@@ -46,10 +64,21 @@
 		}	
 		echo "</table>";
 	}
+	
+	function getOrderBy($conn)
+	{
+		$sql = "SELECT columnName, name FROM TaskColumns;";
+		$retVal = mysql_query($sql, $conn);	
+		echo '<select name="orderBy" id="orderByDropDown" onchange="createTask();">';
+		echo '<option value=""> </option>';
+		while($row = mysql_fetch_array($retVal)){
+			echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
+		}
+		echo'</select>';
+	}
 
 	function getGroups($conn){
-		$userId = 0;
-		$sql = "Select u.groupId, g.name from UserGroups as u left join Groups as g on u.groupId = g.groupId WHERE u.userId = ". $userId .";";
+		$sql = "Select u.groupId, g.name from UserGroups as u left join Groups as g on u.groupId = g.groupId WHERE u.userId = ". $GLOBALS['userId'] .";";
 		$retVal = mysql_query($sql, $conn);
 		echo '<select name = "groups" id="groupId">';
 		while($row = mysql_fetch_array($retVal)){
@@ -57,6 +86,7 @@
 		}
 		echo'</select>';
 	}
+
 	function addTask($conn, $args){
 		/*
 			Args
@@ -68,6 +98,34 @@
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding Task Issue:  ' . mysql_error());
+		}
+	}
+	
+	function createTaskColumns($conn)
+	{
+		$sql = "DROP TABLE TaskColumns;";
+		mysql_query($sql, $conn);
+		$sql = "CREATE TABLE TaskColumns (columnName varchar(50) NOT NULL, name varchar(50) NOT NULL, PRIMARY KEY(columnName, name));";
+		$retval = mysql_query($sql, $conn);
+		if(! $retval){
+			die('Creating TaskColumns Table issue:  ' . mysql_error());
+		}
+		$columnArgs = array("g.name", "Group Name");
+		addToTaskColumn($conn, $columnArgs);
+		$columnArgs = array("g.course", "Course");
+		addToTaskColumn($conn, $columnArgs);
+		$columnArgs = array("t.name", "Task");
+		addToTaskColumn($conn, $columnArgs);
+		$columnArgs = array("t.description", "Description");
+		addToTaskColumn($conn, $columnArgs);
+	}
+
+	function addToTaskColumn($conn, $args)
+	{
+		$sql = "INSERT INTO TaskColumns (columnName, name) VALUES ('" . $args[0] . "', '" . $args[1] . "');";	
+		$retVal = mysql_query($sql, $conn);
+		if (! $retVal){
+			die('Adding to UserGroups Table issue:  ' . mysql_error());
 		}
 	}
 ?>

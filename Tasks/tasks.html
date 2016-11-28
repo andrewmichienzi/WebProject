@@ -13,9 +13,19 @@
 	<script>
 		function createTask()
 		{
+			var orderBy = document.getElementById("orderByDropDown");
+			if(!orderBy)
+			{	
+				var value = "";
+			}
+			else
+			{
+				var value = orderBy.value;
+			}
+			alert(value);
 			$.ajax({
     				type: "POST",
-    				data: {functionId: 0},
+    				data: {functionId: 0, orderBy: value},
     				url: 'sqlTasks.php'
 	
 	    			}).done(function (data) {
@@ -24,6 +34,7 @@
 	                		}
 	               			else {
 					//	alert("Success!");
+						$("#taskList").empty();
 						$("#taskList").append(data);
 					}
 	       			}
@@ -49,6 +60,27 @@
 	       			}
 			);
 		}	
+
+		function addOrderBy()
+		{
+			$.ajax({
+    				type: "POST",
+    				data: {functionId: 4},
+    				url: 'sqlTasks.php'
+	
+	    			}).done(function (data) {
+	                		if(data == "failure") {
+						alert("Failure");
+	                		}
+	               			else {
+					//	alert("Success!");
+						$("#orderBy").append(data);
+					//	alert(data);
+					}
+	       			}
+			);
+		}	
+		
 	
 		function addTask()
 		{
@@ -57,7 +89,7 @@
 				return;
 			var taskDescription = document.getElementById("taskDescription");
 			var groupId = document.getElementById("groupId");
-		
+			alert(orderBy.value);
 			$.ajax({
     				type: "POST",
     				data: {functionId: 2, taskName: taskName.value, taskDescription: taskDescription.value, groupId: groupId.value},
@@ -135,9 +167,7 @@
 				Panel content
 		<!-- Sort By Box -->
 				<div id="sortBy">
-				<form action="sortBy.asp">
-					Sort By: <input type="text" name="sortBy">
-					<input type="submit" value="Sort">
+					Sort By: <div id="orderBy"></div>
 				</form>
 				</div>
 		<!-- Tasks -->
@@ -156,7 +186,8 @@
 		</div>
 	</div>
 	<script>
-		createTask();
+		addOrderBy();
 		addGroups();
+		createTask();
 	</script>
 </body>
