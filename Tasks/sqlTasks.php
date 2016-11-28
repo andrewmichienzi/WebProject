@@ -15,7 +15,6 @@
 	{
 		getGroups($conn);
 	}
-
 	if ($functionId == 2){
 		//Adding task
 		$taskName = $_POST['taskName'];
@@ -80,7 +79,7 @@
 				echo ' checked';
 			}
 			echo' id="checkBox'.$taskId.'" onclick="checkBoxTask('.$taskId.');"/></td>';
-			echo '<td><input type="button" value="Delete" onclick="deleteTask('.$taskId.');"/></td>';
+			echo '<td><input type="button" class="deleteButton" value="Delete" onclick="deleteTask('.$taskId.');"/></td>';
 			echo "</tr>";
 		}	
 		echo "</table>";
