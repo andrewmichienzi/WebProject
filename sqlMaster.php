@@ -34,7 +34,7 @@
 		$testUser3 = array("Molly Alger", "algermo", "algermo@mail.gvsu.edu", "345.678.9012");
 		addUser($conn, $testUser3);
 
-		$testGroup0 = array("Cool Homies", "AWESOME101", "A group where only awesome people are invited", "20161120", "NULL", "0");
+		$testGroup0 = array("Cool Homies", "AWESOME101", "A group where only awesome people are invited", "20161120", "NULL", "1");
 		addGroup($conn, $testGroup0);
 		$testGroup1 = array("Lame Lamies", "LAME98", "must be hella lame", "20150309", "20161203", "1");
 		addGroup($conn, $testGroup1);
@@ -56,6 +56,7 @@
 		$addToGroup3 = array("3", "1");
 		addUserToGroup($conn, $addToGroup3);
 		$addToGroup4 = array("4", "1");
+		addUserToGroup($conn, $addToGroup4);
 
 		$testTask1 = array("1", "Task1", "0", "Test Description");
 		addTask($conn, $testTask1);

@@ -2,6 +2,13 @@
 
 	include '../databaseConnection.php';
 
+	require '../checkSessionInformation.php';
+    //checkSessionInformation();
+	session_start();
+	
+	//$userId = $_SESSION['userId'];
+	$userId = 4;
+	
 	$conn = getDBConnection();
 	
 	$name = $_POST['name'];
