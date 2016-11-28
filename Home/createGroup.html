@@ -33,7 +33,6 @@
 					&& ($("#description").val() == "" || $("#description").val() == null)) {
 					alert("Please fill out all fields.");
 				} else {
-					//$('form').submit();
 					$.ajax({
 						type: 'POST',
 						data: {	groupName: $('#groupName').val(),
