@@ -30,9 +30,33 @@
 					$("#name").val(userData.name);
 					$("#phone").val(userData.phone);
 					$("#email").val(userData.email);
+					setGroupNames();
 				}
 			)
 	});
+	
+	function setGroupNames(userInfo) {
+		$.ajax("../getUserGroups.php")
+		.done(function (data) {
+			var obj = JSON.parse(data);
+			var groups = "";
+			for(key in obj){
+				groups = groups + obj[key] + " ";
+				groups = groups + "<button id='leave' onclick='leaveGroup("+key+")'>Leave Group</button><br>";
+			};
+			document.getElementById("groups").innerHTML = groups;
+		});
+	}
+	
+	function leaveGroup(groupId) {
+		$.ajax({
+			type:"POST",
+			url:"./leaveGroup.php",
+			data:{group:groupId}
+		}).done(function(data) {
+			window.location.href = "./userProfile.html";
+		});
+	}
 
 	function validateForm() {
 		var message = "";
@@ -79,7 +103,7 @@
 <body>
 	<div id = "header">
 		<div class="row">
-				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="logo.png"/>
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
 			<div class="nav navbar-nav">
@@ -107,6 +131,8 @@
 					<input type="text" name="phone" id="phone"><br>
 					Email: <br>
 					<input type="text" name="email" id="email"><br>
+					Groups: <br>
+					<p id="groups"></p>
 					<input type="submit" value="Submit">
 					<p id="error"></p>
 				</form>

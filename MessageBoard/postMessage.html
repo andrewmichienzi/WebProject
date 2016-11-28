@@ -39,9 +39,9 @@
 			} 
 			today = mm+''+dd+''+yyyy;
 			
-			$.ajax({url:"./messageBoard.php",
+			$.ajax({url:"./makePost.php",
 				type:"POST",
-				data:{type: "makePost", date:today, message: $("#text").val() }
+				data:{date:today, message: $("#text").val() }
 			}).done(function(data) {
 				window.location.href = "./messages.html";
 			});
@@ -51,7 +51,7 @@
 <body>
 	<div id = "header">
 		<div class="row">
-				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="logo.png"/>
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
 			<div class="nav navbar-nav">

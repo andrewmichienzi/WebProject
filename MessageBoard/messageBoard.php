@@ -30,7 +30,7 @@
 		
 		$messageID;
 		
-		$sql = "SELECT * FROM MessageBoard WHERE groupId='" .$groupId. "';";
+		$sql = "SELECT * FROM MessageBoard WHERE groupId='" .$GLOBALS['groupId']. "';";
 		$result = mysql_query($sql, $conn);
 		if($result == NULL) {
 			return;
@@ -65,7 +65,7 @@
 		
 		// get groupId and userId from session variables
 		// auto increment messageID
-		$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('".$groupId."', '".$userId."', '".$date."', '".$message."');";
+		$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('".$GLOBALS['groupId']."', '".$GLOBALS['userId']."', '".$date."', '".$message."');";
 		mysql_query($sql, $conn);
 		showPost($user, $date, $message);
 		
