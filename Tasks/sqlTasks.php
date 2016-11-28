@@ -1,9 +1,12 @@
 <?php
 	require '../databaseConnection.php';
+	require '../checkSessionInformation.php';
+	checkSessionInformation();
+	session_start();
 //	require '../sqlMaster.php';
 	$conn = getDBConnection();
 	$functionId = $_POST['functionId'];
-	$GLOBALS['userId'] = 1;
+	$GLOBALS['userId'] = (int)trim($_SESSION['userId'], "'");
 	if ($functionId == 0)
 	{
 		getTasks($conn);

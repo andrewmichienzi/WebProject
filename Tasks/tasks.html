@@ -42,23 +42,25 @@
 
 		function deleteTask(taskId)
 		{
-			$.ajax({
-    				type: "POST",
-    				data: {functionId: 3, taskId: taskId},
-    				url: 'sqlTasks.php'
-	
-	    			}).done(function (data) {
-	                		if(data == "failure") {
-						alert("Failure");
-	                		}
-	               			else {
-						//alert("Success!");
-					}
-	       			}
-			);
-			location.reload();
-		}	
-	
+			if(confirm('Are you sure you want to delete this task?'))
+			{
+				$.ajax({
+    					type: "POST",
+    					data: {functionId: 3, taskId: taskId},
+    					url: 'sqlTasks.php'
+		
+		    			}).done(function (data) {
+		                		if(data == "failure") {
+							alert("Failure");
+		                		}
+		               			else {
+							//alert("Success!");
+						}
+		       			}
+				);
+				location.reload();
+			}	
+		}
 		function addGroups()
 		{
 			$.ajax({
@@ -137,7 +139,6 @@
 	                		}
 	               			else {
 					//	alert("Success!");
-						alert(data);
 					}
 	       			}
 			);
