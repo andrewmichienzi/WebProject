@@ -21,23 +21,33 @@
 		$args = array($groupId, $taskName, $GLOBALS['userId'], $taskDescription);
 		addTask($conn, $args);
 	}
+
+	if($functionId == 3){
+		deleteTask($conn, $_POST['taskId']);
+	}
 		
 	if($functionId == 4){
 		getOrderBy($conn);
 	}	
 
 	function getTasks($conn){
-//		$sql = "Select * from Tasks;";
 		createTaskColumns($conn);
-		$columnSql = "Select columnName from TaskColumns;";
+		$columnSql = "Select columnName, name from TaskColumns;";
 		$columnRet = mysql_query($columnSql, $conn);
 		$sql = "Select ";
+		echo '<table id="taskTable">';
+		echo "<tr>";
+		$numOfRows = 0;
 		while($row = mysql_fetch_array($columnRet))
 		{
 			$sql.= $row['columnName'] . ", ";
+			echo "<th>".$row['name'] . "</th>";
+			$numOfRows++;
 		}	
-		$sql = substr($sql, 0, -2);
-		$sql .= " from Tasks as t left join Groups as g on g.groupId = t.groupId where t.userId = ".$GLOBALS['userId'];
+		echo "<th>Delete Task</th>";
+		echo "</tr>";
+		//$sql = substr($sql, 0, -2);
+		$sql .= "t.taskId from Tasks as t left join Groups as g on g.groupId = t.groupId where t.userId = ".$GLOBALS['userId'];
 		$orderBy = $_POST['orderBy'];
 		if($orderBy != "")
 		{
@@ -45,21 +55,16 @@
 		}
 		$sql .= ";";
 		$retVal = mysql_query($sql, $conn);
-//		echo json_encode(mysql_fetch_array($retVal));
-		echo "<table id=taskTable>
-		<tr>
-		<th>Group</th>
-		<th>Course</th>
-		<th>Task Name</th>
-		<th>Task Description</th>
-		</tr>";
-			
+	
 		while($row = mysql_fetch_array($retVal)){
-			echo "<tr>";
-			echo "<td>". $row[0] . "</td>";
-			echo "<td>". $row[1] . "</td>";
-			echo "<td>". $row[2] . "</td>";
-			echo "<td>". $row[3] . "</td>";
+			echo '<tr id="task'.$row[$numOfRows].'">';
+			$index = 0;
+			while($index < $numOfRows)
+			{ 
+				echo "<td>". $row[$index] . "</td>";
+				$index++;
+			}
+			echo '<td><input type="button" value="Delete" onclick="deleteTask('.$row[$numOfRows].');"/></td>';
 			echo "</tr>";
 		}	
 		echo "</table>";
@@ -126,6 +131,15 @@
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding to UserGroups Table issue:  ' . mysql_error());
+		}
+	}
+
+	function deleteTask($conn, $taskId)
+	{
+		$sql = "DELETE FROM Tasks where taskId = ".$taskId.";";
+		$retVal = mysql_query($sql, $conn);
+		if (! $retVal){
+			die('Issue removing Task from Task Table: ' . mysql_error());
 		}
 	}
 ?>

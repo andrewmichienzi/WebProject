@@ -22,7 +22,6 @@
 			{
 				var value = orderBy.value;
 			}
-			alert(value);
 			$.ajax({
     				type: "POST",
     				data: {functionId: 0, orderBy: value},
@@ -33,14 +32,32 @@
 						alert("Failure");
 	                		}
 	               			else {
-					//	alert("Success!");
 						$("#taskList").empty();
 						$("#taskList").append(data);
 					}
 	       			}
 			);
-		//alert("Hello");
 		}
+
+		function deleteTask(taskId)
+		{
+			$.ajax({
+    				type: "POST",
+    				data: {functionId: 3, taskId: taskId},
+    				url: 'sqlTasks.php'
+	
+	    			}).done(function (data) {
+	                		if(data == "failure") {
+						alert("Failure");
+	                		}
+	               			else {
+						//alert("Success!");
+					}
+	       			}
+			);
+			location.reload();
+		}	
+	
 		function addGroups()
 		{
 			$.ajax({
@@ -89,7 +106,6 @@
 				return;
 			var taskDescription = document.getElementById("taskDescription");
 			var groupId = document.getElementById("groupId");
-			alert(orderBy.value);
 			$.ajax({
     				type: "POST",
     				data: {functionId: 2, taskName: taskName.value, taskDescription: taskDescription.value, groupId: groupId.value},
@@ -100,44 +116,11 @@
 						alert("Failure");
 	                		}
 	               			else {
-						alert("Success!");
+						//alert("Success!");
 //						createTask();
 					}
 	       			}
 			);
-		}
-	
-		function test()
-		{
-			$.ajax({
-    				type: "POST",
-    				url: '../sqlDataMaster.php',
-    				dataType: 'json',
-    				data: {functionname: 'Test'},
-	
-	    			success: function (obj, textstatus) {
-	                		if( !('error' in obj) ) {
-						alert("Success");
-	                		}
-	               			else {
-						alert("error");
-	      					console.log(obj.error);
-	                		}
-	       			}
-			});
-
-		}
-
-		function getAll(table)
-		{
-			//Select * from {table}
-			var ajaxRequest;
-			ajaxRequest = new XMLHttpRequest();
-			ajaxRequest.onreadystatechange=function(){
-				if(ajaxRequest.readyState == 4)
-					return ajaxRequest.responseText;
-			}
-			
 		}
 	</script>
 </head>
