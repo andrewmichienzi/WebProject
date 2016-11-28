@@ -87,7 +87,7 @@
 	function createTasksTable($conn){
 		$sql = "DROP TABLE Tasks;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE Tasks (taskId INT NOT NULL AUTO_INCREMENT, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), PRIMARY KEY(taskId, groupId));";
+		$sql = "CREATE TABLE Tasks (taskId INT NOT NULL AUTO_INCREMENT, groupId INT NOT NULL, name varchar(25) NOT NULL, userId INT, description varchar(75), completed BOOL, PRIMARY KEY(taskId, groupId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Tasks Table issue:  ' . mysql_error());
@@ -157,9 +157,9 @@
 				0 groupId
 				1 name
 				2 userId
-				3 descripttion
+				3 description
 		*/
-		$sql = "INSERT INTO Tasks ( groupId, name, userId, description) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "');";	
+		$sql = "INSERT INTO Tasks ( groupId, name, userId, description, completed) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', FALSE);";	
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding Task Issue:  ' . mysql_error());

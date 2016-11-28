@@ -34,6 +34,7 @@
 	               			else {
 						$("#taskList").empty();
 						$("#taskList").append(data);
+						//alert(data);
 					}
 	       			}
 			);
@@ -118,6 +119,25 @@
 	               			else {
 						//alert("Success!");
 //						createTask();
+					}
+	       			}
+			);
+		}
+		function checkBoxTask(taskId)
+		{
+			var checkBox = document.getElementById("checkBox"+taskId);
+			$.ajax({
+    				type: "POST",
+    				data: {functionId: 5, taskId: taskId, checked: checkBox.checked},
+    				url: 'sqlTasks.php'
+	
+	    			}).done(function (data) {
+	                		if(data == "failure") {
+						alert("Failure");
+	                		}
+	               			else {
+					//	alert("Success!");
+						alert(data);
 					}
 	       			}
 			);

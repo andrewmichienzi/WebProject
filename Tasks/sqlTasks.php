@@ -28,6 +28,10 @@
 		
 	if($functionId == 4){
 		getOrderBy($conn);
+	}
+		
+	if($functionId == 5){
+		setTaskChecked($conn, $_POST['taskId'], $_POST['checked']);
 	}	
 
 	function getTasks($conn){
@@ -43,11 +47,12 @@
 			$sql.= $row['columnName'] . ", ";
 			echo "<th>".$row['name'] . "</th>";
 			$numOfRows++;
-		}	
+		}
+		echo "<th>Completed</th>";	
 		echo "<th>Delete Task</th>";
 		echo "</tr>";
 		//$sql = substr($sql, 0, -2);
-		$sql .= "t.taskId from Tasks as t left join Groups as g on g.groupId = t.groupId where t.userId = ".$GLOBALS['userId'];
+		$sql .= "t.completed, t.taskId from Tasks as t left join Groups as g on g.groupId = t.groupId where t.userId = ".$GLOBALS['userId'];
 		$orderBy = $_POST['orderBy'];
 		if($orderBy != "")
 		{
@@ -57,14 +62,22 @@
 		$retVal = mysql_query($sql, $conn);
 	
 		while($row = mysql_fetch_array($retVal)){
-			echo '<tr id="task'.$row[$numOfRows].'">';
+			$taskId = $row[$numOfRows+1];
+			$completed = $row[$numOfRows];
+			echo '<tr id="task'.$taskId.'">';
 			$index = 0;
 			while($index < $numOfRows)
 			{ 
 				echo "<td>". $row[$index] . "</td>";
 				$index++;
 			}
-			echo '<td><input type="button" value="Delete" onclick="deleteTask('.$row[$numOfRows].');"/></td>';
+			echo '<td><input type="checkbox"';
+			if($completed)
+			{
+				echo ' checked';
+			}
+			echo' id="checkBox'.$taskId.'" onclick="checkBoxTask('.$taskId.');"/></td>';
+			echo '<td><input type="button" value="Delete" onclick="deleteTask('.$taskId.');"/></td>';
 			echo "</tr>";
 		}	
 		echo "</table>";
@@ -98,8 +111,9 @@
 				0 groupId
 				1 name
 				2 userId
-				3 descripttion*/
-		$sql = "INSERT INTO Tasks ( groupId, name, userId, description) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "');";	
+				3 description
+		*/
+		$sql = "INSERT INTO Tasks ( groupId, name, userId, description, completed) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', FALSE);";	
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding Task Issue:  ' . mysql_error());
@@ -137,6 +151,15 @@
 	function deleteTask($conn, $taskId)
 	{
 		$sql = "DELETE FROM Tasks where taskId = ".$taskId.";";
+		$retVal = mysql_query($sql, $conn);
+		if (! $retVal){
+			die('Issue removing Task from Task Table: ' . mysql_error());
+		}
+	}
+		
+	function setTaskChecked($conn, $taskId, $checked)
+	{
+		$sql = "UPDATE Tasks SET completed=".$checked." where taskId = ".$taskId.";";
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Issue removing Task from Task Table: ' . mysql_error());
