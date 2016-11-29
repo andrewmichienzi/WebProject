@@ -13,19 +13,9 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Site-wide css -->
+	<link rel="stylesheet" href="../default.css">
 	<style>
-		body {
-			background: url("../background.jpg");
-		}
-		#header {
-			margin-top: 2%;
-		}
-		.bottomMargin {
-			margin-bottom:1em;
-		}
-		#content {
-			padding:0;
-		}
 		#groupInformation h4 {
 			display: inline-block;
 		}
