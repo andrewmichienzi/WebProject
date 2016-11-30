@@ -1,20 +1,17 @@
 <?php
 
 	require '../checkSessionInformation.php';
-    //checkSessionInformation();
+    checkSessionInformation();
 	session_start();
 	
+	$groupId = $_SESSION['groupId'];
+	$userId = $_SESSION['userId'];
+	$user = $_SESSION['user'];
+	
 	include '../databaseConnection.php';
-	
 	$conn = getDBConnection();
-	
-	//$groupId = $_SESSION['groupId'];
-	//$userId = $_SESSION['userId'];
-	//$user = $_SESSION['user'];
-	
-	$groupId = 1;
-	$userId = 4;
-	$user = "algermo";
+	if($conn->connection_error)
+		die("Connection failed: " . $conn->connect_error);
 
 	$message = $_POST['message'];
 	

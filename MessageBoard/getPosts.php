@@ -1,11 +1,16 @@
 <?php
 	
+	require '../checkSessionInformation.php';
+    checkSessionInformation();
+	session_start();
+	
+	$groupId = $_SESSION['groupId'];
+	
 	require '../databaseConnection.php';
 	$conn = getDBConnection();
 	if($conn->connection_error)
 		die("Connection failed: " . $conn->connect_error);
 	
-	$groupId = 1;
 	
 	$sql = "SELECT * FROM MessageBoard WHERE groupId=" .$groupId. ";";
 	$result = mysql_query($sql, $conn);

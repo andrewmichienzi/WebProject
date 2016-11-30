@@ -1,18 +1,19 @@
 <?php
+
 	require '../checkSessionInformation.php';
-    //checkSessionInformation();
+    checkSessionInformation();
 	session_start();
 	
+	$userId = $_SESSION['userId'];
+	
 	include '../databaseConnection.php';
-	
 	$conn = getDBConnection();
+	if($conn->connection_error)
+		die("Connection failed: " . $conn->connect_error);
 	
-	$userId = 4;
 	$groupId = $_POST['group'];
 	
 	$sql = "DELETE FROM UserGroups WHERE groupId = '".$groupId."' AND userId = '".$userId."';";
 	$result = mysql_query($sql, $conn);
-	
-	echo "Left group.";
 	
 ?>
