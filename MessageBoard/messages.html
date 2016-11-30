@@ -15,10 +15,6 @@
 	$.ajax("./getPosts.php")
 		.done(function(data) {
 			if(data != "none"){
-				//var postData = JSON.parse(data);
-				//$("#user").val(postData.user);
-				//$("#date").val(postData.date);
-				//$("#message").val(postData.message);
 
 				var obj = JSON.parse(data);
 				var row = $("<div class='row'>");
@@ -27,8 +23,9 @@
 					var val1 = key;
 					var val2 = obj[key];
 					row = $("<div class='row'>");
-					$("#container").append(row);
 					row.append(val2);
+					$("#container").append(row);
+					
 				} 
 			}
 			});

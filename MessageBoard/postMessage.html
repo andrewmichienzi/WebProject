@@ -24,24 +24,10 @@
 	</style>
 	<script>
 			
-		function makePost(){
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1;
-			var yyyy = today.getFullYear();
-
-			if(dd<10) {
-				dd='0'+dd
-			} 
-
-			if(mm<10) {
-				mm='0'+mm
-			} 
-			today = mm+''+dd+''+yyyy;
-			
+		function makePost(){	
 			$.ajax({url:"./makePost.php",
 				type:"POST",
-				data:{date:today, message: $("#text").val() }
+				data:{message: $("#text").val() }
 			}).done(function(data) {
 				window.location.href = "./messages.html";
 			});

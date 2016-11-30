@@ -15,11 +15,10 @@
 	$groupId = 1;
 	$userId = 4;
 	$user = "algermo";
-	
-	$date = $_POST['date'];
+
 	$message = $_POST['message'];
 	
-	$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('".$groupId."', '".$userId."', '".$date."', '".$message."');";
+	$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('".$groupId."', '".$userId."', NOW(), '".$message."');";
 	mysql_query($sql, $conn);
 
 ?>
