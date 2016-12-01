@@ -19,9 +19,17 @@
 		echo "none";
 	}
 	
+	$allPosts = array();
 	$postData = array();
 	
 	while($row = mysql_fetch_array($result)) {
+		$allPosts[$row['messageId']] = array();
+		$postData = $allPosts[$row['messageId']];
+		echo $row['messageId'];
+		$allPosts[$row['messageId']]['date'] = $row['postDate'];
+		echo $allPosts[$row['messageId']]['date'];
+
+		$postData['messageId'] = $row['messageId'];
 		
 		$postData['date'] = $row['postDate'];
 		$postData['message'] = $row['message'];
@@ -33,5 +41,5 @@
 		}
 	}
 	
-	echo json_encode($postData);
+	echo json_encode($allPosts);
 ?>

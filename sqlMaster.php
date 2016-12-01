@@ -60,6 +60,11 @@
 
 		$testTask1 = array("1", "Task1", "0", "Test Description");
 		addTask($conn, $testTask1);
+		
+		$testMessage1 = array("1", "4", "20161130", "This is a test message.");
+		addMessage($conn, $testMessage1);
+		$testMessage2 = array("1", "1", "20161201", "This is another message.");
+		addMessage($conn, $testMessage2);
     	
 		printTables($conn);
 	}
@@ -110,7 +115,7 @@
 	function createMessageBoardTable($conn){
 		$sql = "DROP TABLE MessageBoard;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE MessageBoard (groupId INT NOT NULL, userId INT NOT NULL, postDate DATE NOT NULL, messageID INT NOT NULL AUTO_INCREMENT, message varchar(500), PRIMARY KEY(messageID));";
+		$sql = "CREATE TABLE MessageBoard (groupId INT NOT NULL, userId INT NOT NULL, postDate DATE NOT NULL, messageId INT NOT NULL AUTO_INCREMENT, message varchar(500), PRIMARY KEY(messageId));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating Message Board Table issue:  ' . mysql_error());
@@ -205,6 +210,24 @@
 		}
 	}
 	
+	function addMessage($conn, $args)
+	{	
+		/*
+			Adding message to message board table
+			
+			Args
+				0 groupId
+				1 userId
+				2 postDate
+				3 message
+		*/
+		$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "');";	
+		$retVal = mysql_query($sql, $conn);
+		if (! $retVal){
+			die('Adding to MessageBoard Table issue:  ' . mysql_error());
+		}
+	}
+	
 	function printTables($conn){
 		$sql = "Select * from Users;";
 		$retVal = mysql_query($sql, $conn);
@@ -225,6 +248,14 @@
 		echo '<br>Current Groups:<br>';
 		while($row = mysql_fetch_array($retVal)){
 			echo "GroupId: ".$row['groupId']." GroupName: ".$row['name'];
+			echo '<br>';
+		}
+		
+		$sql = "Select * from MessageBoard;";
+		$retVal = mysql_query($sql, $conn);
+		echo '<br>Messages:<br>';
+		while($row = mysql_fetch_array($retVal)){
+			echo "MessageId: ".$row['messageId']." UserId: ".$row['userId']." Message: ".$row['message']." Date: ".$row['postDate'];
 			echo '<br>';
 		}
 	}
