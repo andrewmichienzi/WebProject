@@ -14,6 +14,6 @@
 	}
 
 	session_regenerate_id(true);
-	header("Location: ./login.html");
+	header("Location: ./Home/login.html");
 	exit();
 ?>

@@ -12,6 +12,7 @@
 	
 	runSqlScripts($conn);	
 	addSampleData($conn);
+	printTables($conn);
 	echo "<br>SUCCESS";
 
 	function runSqlScripts($conn)
@@ -21,6 +22,7 @@
 		createTasksTable($conn);
 		createUserGroupsTable($conn);
 		createMessageBoardTable($conn);
+		createGroupMeetingTable($conn);
 	}	
 
 	function addSampleData($conn)
@@ -34,29 +36,27 @@
 		$testUser3 = array("Molly Alger", "algermo", "algermo@mail.gvsu.edu", "345.678.9012");
 		addUser($conn, $testUser3);
 
-		$testGroup0 = array("Cool Homies", "AWESOME101", "A group where only awesome people are invited", "20161120", "NULL", "1");
+		$testGroup0 = array("Web App: Groupee", "CIS 371", "A group for the CIS 371 group website project.", "20161120", "NULL", "1");
 		addGroup($conn, $testGroup0);
-		$testGroup1 = array("Lame Lamies", "LAME98", "must be hella lame", "20150309", "20161203", "1");
+		$testGroup1 = array("Biology Semester Project", "BIO 305", "A group for the BIO 305 semester project.", "20150309", "20161203", "2");
 		addGroup($conn, $testGroup1);
-		$testGroup2 = array("Group A", "GRA", "Group A group description", "20150309", "20161203", "2");
+		$testGroup2 = array("HNR Senior Project", "HNR 499", "A group for the AtomAction senior project.", "20150309", "20161203", "3");
 		addGroup($conn, $testGroup2);
-		$testGroup3 = array("Group B", "GRB", "Group B group description", "20150309", "20161203", "2");
+		$testGroup3 = array("Art 101 Group", "ART 101", "A group for the ART 101 final project.", "20150309", "20161203", "4");
 		addGroup($conn, $testGroup3);
-		$testGroup4 = array("Group C", "GRC", "Group C group description", "20150309", "20161203", "2");
-		addGroup($conn, $testGroup4);
-		$testGroup5 = array("Group D", "GRD", "Group D group description", "20150309", "20161203", "2");
-		addGroup($conn, $testGroup5);
-		$testGroup6 = array("Group E", "GRE", "Group E group description", "20150309", "20161203", "1");
-		addGroup($conn, $testGroup6);
 		
-		$addToGroup1 = array("1", "1");
+		$addToGroup1 = array("2", "1");
 		addUserToGroup($conn, $testGroup1);
-		$addToGroup2 = array("2", "1");
+		$addToGroup2 = array("3", "1");
 		addUserToGroup($conn, $addToGroup2);
-		$addToGroup3 = array("3", "1");
+		$addToGroup3 = array("4", "1");
 		addUserToGroup($conn, $addToGroup3);
-		$addToGroup4 = array("4", "1");
+		$addToGroup4 = array("4", "2");
 		addUserToGroup($conn, $addToGroup4);
+		$addToGroup5 = array("2", "3");
+		addUserToGroup($conn, $addToGroup5);
+		$addToGroup6 = array("1", "4");
+		addUserToGroup($conn, $addToGroup6);
 
 		$testTask1 = array("1", "Task1", "0", "Test Description");
 		addTask($conn, $testTask1);
@@ -65,8 +65,6 @@
 		addMessage($conn, $testMessage1);
 		$testMessage2 = array("1", "1", "20161201", "This is another message.");
 		addMessage($conn, $testMessage2);
-    	
-		printTables($conn);
 	}
 
 	function createUsersTable($conn){
@@ -131,6 +129,16 @@
 			die('Creating Message Board Table issue:  ' . mysql_error());
 		}
 	}
+
+	function createGroupMeetingTable($conn){
+        $sql = "DROP TABLE GroupMeeting;";
+        mysql_query($sql, $conn);
+        $sql = "CREATE TABLE GroupMeeting (meetingId INT NOT NULL AUTO_INCREMENT, groupId INT NOT NULL, groupName VARCHAR(25), meetingDate VARCHAR(12), meetingTime VARCHAR(12), meetingDescription VARCHAR(500), PRIMARY KEY(meetingId, groupId))";
+        $retval = mysql_query($sql, $conn);
+        if(! $retval){
+            die('Creating Group Meeting Table issue:  ' . mysql_error());
+        }
+    }
 
 	function printTableNames($conn){
 		$sql = "Select table_name from information_schema.tables;";
@@ -233,7 +241,7 @@
 		$retVal = mysql_query($sql, $conn);
 		echo 'Current Users:<br>';
 		while($row = mysql_fetch_array($retVal)){
-			echo "UserId: ".$row['userId']." Username: ".$row['username']."<br>";
+			echo "UserId: ".$row['userId']." Username: ".$row['username']." Name: ".$row['name']."<br>";		
 		}
 		
 		$sql = "Select * from UserGroups;";

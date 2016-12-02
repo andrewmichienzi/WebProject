@@ -4,15 +4,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-	<form name = "frmCreateMeeting" action="createMeetingAction.php" onsubmit = "return formValidate(document.forms['frmCreateMeeting']['txtUserId'].value)" method="POST">
+	<form name = "frmCreateMeeting" action="createMeetingAction.php" onsubmit = "return formValidate()" method="POST">
 	   	Group ID:<br>
-		<input type = "text" name = "txtGroupId" value = "1"><br>
+		<input type = "text" name = "txtGroupId"  onchange="showGroupAvailability(this.value)"><br>
 		Group Name:<br>
-		<input type = "text" name = "txtGroupName" value = "Group 1"><br>		
-		User ID:<br>
-		<input type = "text" name = "txtUserId" onchange="showGroupAvailability(this.value)"><br>
-		Meeting ID:<br>
-		<input type = "text" name = "txtMeetingId" value = "1"><br>
+		<input type = "text" name = "txtGroupName"><br>		
 		<p id="txtHint">Schedule info will be listed here...</p>		
 		Date:<br>
 		<input type = "date" name = "txtMeetingDate" onchange="checkDayForAvailability(this.value)"><br>
@@ -36,15 +32,33 @@
 			weekday[4] = "Friday";
 			weekday[5] = "Saturday";
 			weekday[6] = "Sunday";
-		function formValidate(str)
+		
+		
+		 $(document).ready(function () {
+			var userInfo;
+			getSessionInfo(userInfo);
+		});
+
+		function getSessionInfo(userInfo) {
+			$.ajax("../getSessionInformationAjax.php")
+			.done(function(data) {
+				data = JSON.parse(data);
+				if(data.userVars == 'false') {
+					window.location.href = "../login.html";
+					$("#txtGroupId").val(userInfo.groupId);
+				} else {
+					userInfo = data;
+					$('#user').text(userInfo.name);
+					$("#txtGroupId").val(userInfo.groupId);
+					$("#txtGroupName").val(userInfo.groupName);
+				}
+			});
+		}
+
+		function formValidate()
 		{		
 			var errorMessage = "";
 			var isValid = true;
-			var txtUserId = "";
-			var txtDate = "";
-			var txtTime = "";
-			var txtDescription = "";
-			var xmlHttp = "";
 			
 			errorMessage = formComplete();	
 			if (errorMessage.localeCompare("") != 0)
@@ -56,7 +70,7 @@
 			}
 			if (document.getElementById("txtTimeError").innerHTML.localeCompare("") != 0 || document.getElementById("txtDateError").innerHTML.localeCompare("") != 0)
 			{
-				alert("There appears to be conflicts between your Meeting Date/Time and your group's availability. The Group Meeting cannot currently be submitted as is.");			
+				alert("There appears to be conflicts between the Meeting Date/Time below and your group's availability. The Group Meeting cannot currently be submitted as is.");			
 				isValid = false;
 				return isValid;
 			}			
@@ -68,12 +82,12 @@
 			$.ajax({
 					type: "POST",
 					data: { groupId: idVal},
-					url: "queryUserGroup.php"
+					url: "http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/queryUserGroup.php" 
 			}).done(function(data){
 					 
 				var availabilityArray = data.split(";");			
 			
-				document.getElementById("txtHint").innerHTML = "Your group's availability:" + "<br><br>" + availabilityArray.join('<br>');
+				document.getElementById("txtHint").innerHTML = "Your group's availability:" + "<br><br>" + availabilityArray.join("<br>");
 			});
 		}
 		
@@ -86,19 +100,29 @@
 				document.getElementById("txtDayError").innerHTML =	"";
 			else
 				document.getElementById("txtDayError").innerHTML = dValInDay + " is not in your group's availability!";
+		
+			checkTimeForAvailability(document.forms['frmCreateMeeting']['txtMtgTimeStart'].value, document.forms['frmCreateMeeting']['txtMtgTimeEnd'].value);
 
 		}
 
 		function checkTimeForAvailability(mtgStartStr, mtgEndStr)
 		{
 			//		
-			if (mtgEndStr.localeCompare("") == 0)
-				return;			
+			if (mtgStartStr.localeCompare("") == 0 || mtgEndStr.localeCompare("") == 0)
+				return;	
+
+			if (mtgStartStr.localeCompare(mtgEndStr) == 0)
+			{
+				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: Please select a valid length of time for the meeting.";	
+				return;		
+			}	
+	
 			var dVal = new Date(document.forms['frmCreateMeeting']['txtMeetingDate'].value);
 			var dValInDay = weekday[dVal.getDay()];		
 			var availability = document.getElementById("txtHint").innerHTML;
 			var availabilityArray = availability.split("<br>");
 			var availableDay;
+			var validTime = false;
 			
 			//			
 			for (var i = 0; i < availabilityArray.length; i++)
@@ -106,64 +130,63 @@
 				if(availabilityArray[i].includes(dValInDay))
 				{
 					availableDay = availabilityArray[i];
+					//
+					var availableWindow = availableDay.split("- ")[1];
+					var availableStartString = availableWindow.split("-")[0];
+					var availableEndString = availableWindow.split("-")[1];
+					var availableStartHourInt = parseInt(availableStartString.split(":")[0], 10);
+					var availableStartMinInt = parseInt(availableStartString.split(":")[1], 10);
+					var availableEndHourInt = parseInt(availableEndString.split(":")[0], 10);
+					var availableEndMinInt = parseInt(availableEndString.split(":")[1], 10);
+					//
+					var mtgStartHourInt = parseInt(mtgStartStr.split(":")[0], 10);
+					var mtgStartMinInt = parseInt(mtgStartStr.split(":")[1], 10);
+					var mtgEndHourInt = parseInt(mtgEndStr.split(":")[0], 10);
+					var mtgEndMinInt = parseInt(mtgEndStr.split(":")[1], 10);
+			
+					//check if the meeting has a valid start but invalid end or vice versa
+					if ((mtgStartHourInt > availableStartHourInt && (mtgStartHourInt > availableEndHourInt || mtgStartHourInt > mtgEndHourInt)) || 
+						(mtgEndHourInt < availableEndHourInt && (mtgEndHourInt < availableStartHourInt || mtgEndHourInt < mtgStartHourInt)))
+					{
+						continue;
+					}
+					// check if the meeting start and end values seem to be contradictory with respect to themselves i.e start before you finish, etc.
+					else if((mtgEndHourInt < mtgStartHourInt && mtgEndHourInt > availableEndHourInt) || 
+					   (mtgStartHourInt > mtgEndHourInt && mtgStartHourInt < availableStartHourInt))
+					{
+						continue;
+					}
+					//check if the meeting time is just outside of the available window of time by a few minutes
+					else if ((mtgStartHourInt == availableStartHourInt || mtgEndHourInt == availableEndHourInt) &&
+						mtgStartHourInt < availableStartHourInt || mtgEndHourInt > availableEndHourInt)
+					{
+						continue;
+					} 			
+					// if the hours fit within the window, but still need to verify that the minutes do as well 
+					else if (availableStartHourInt <= mtgStartHourInt && availableEndHourInt >= mtgEndHourInt)
+					{
+						if ((availableStartHourInt == mtgStartHourInt && availableStartMinInt > mtgStartMinInt) || 
+							(availableEndHourInt == mtgEndHourInt && availableEndMinInt < mtgEndMinInt) 
+							|| (mtgEndHourInt < availableStartHourInt && mtgEndHourInt > availableEndHourInt))
+						{
+							continue;
+						}
+					}
+					
+					validTime = true;
 					break;
+				}
+				else 
+				{
+					continue;				
 				}						
 			}
 			
-			//
-			var availableWindow = availableDay.split("- ")[1];
-			var availableStartString = availableWindow.split("-")[0];
-			var availableEndString = availableWindow.split("-")[1];
-			var availableStartHourInt = parseInt(availableStartString.split(":")[0], 10);
-			var availableStartMinInt = parseInt(availableStartString.split(":")[1], 10);
-			var availableEndHourInt = parseInt(availableEndString.split(":")[0], 10);
-			var availableEndMinInt = parseInt(availableEndString.split(":")[1], 10);
-			//
-			var mtgStartHourInt = parseInt(mtgStartStr.split(":")[0], 10);
-			var mtgStartMinInt = parseInt(mtgStartStr.split(":")[1], 10);
-			var mtgEndHourInt = parseInt(mtgEndStr.split(":")[0], 10);
-			var mtgEndMinInt = parseInt(mtgEndStr.split(":")[1], 10);
+			if (validTime)
+				document.getElementById("txtTimeError").innerHTML = "";
 			
-			//check if the meeting has a valid start but invalid end or vice versa
-			if ((mtgStartHourInt > availableStartHourInt && (mtgStartHourInt > availableEndHourInt || mtgStartHourInt > mtgEndHourInt)) || 
-				(mtgEndHourInt < availableEndHourInt && (mtgEndHourInt < availableStartHourInt || mtgEndHourInt < mtgStartHourInt)))
-			{
-				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: The available window of time for " + availableDay.split("- ")[0] + "'s is " + availableWindow;
-				return;
-			}
-			// check if the meeting start and end values seem to be contradictory with respect to themselves i.e start before you finish, etc.
-			if((mtgEndHourInt < mtgStartHourInt && mtgEndHourInt > availableEndHourInt) || 
-			   (mtgStartHourInt > mtgEndHourInt && mtgStartHourInt < availableStartHourInt))
-			{
-				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: The available window of time for " + availableDay.split("- ")[0] + "'s is " + availableWindow;
-				return;
-			}
-			//check if the meeting time is just outside of the available window of time by a few minutes
-			if ((mtgStartHourInt == availableStartHourInt || mtgEndHourInt == availableEndHourInt) &&
-				mtgStartHourInt < availableStartHourInt || mtgEndHourInt > availableEndHourInt)
-			{
-				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: The available window of time for " + availableDay.split("- ")[0] + "'s is " + availableWindow;
-				return;
-			} 			
-			// if the hours fit within the window, but still need to verify that the minutes do as well 
-			if (availableStartHourInt <= mtgStartHourInt && availableEndHourInt >= mtgEndHourInt)
-			{
-				if ((availableStartHourInt == mtgStartHourInt && availableStartMinInt > mtgStartMinInt) || 
-					(availableEndHourInt == mtgEndHourInt && availableEndMinInt < mtgEndMinInt) 
-					|| (mtgEndHourInt < availableStartHourInt && mtgEndHourInt > availableEndHourInt))
-				{
-					document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: The available window of time for " + availableDay.split("- ")[0] + "'s is " + availableWindow;
-					return;
-				}
-			}
-			if (mtgStartStr.localeCompare(mtgEndStr) == 0)
-			{
-				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: Please select a valid length of time for the meeting.";	
-				return;		
-			}
-			
-			document.getElementById("txtTimeError").innerHTML = "";
-			
+			else 
+				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: The meeting date and time you chose does not appear to be within anyone's availability. Please select an appropriate time for your group.";
 		}
 
 		function formComplete()

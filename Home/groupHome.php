@@ -19,7 +19,7 @@
 		#groupInformation h4 {
 			display: inline-block;
 		}
-		span {
+		.padded {
 			padding-left: 1em;
 		}
 		.hidden {
@@ -76,11 +76,11 @@
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
 			<ul class="nav navbar-nav">
 				<li><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
-				<li class="active"><a id="currentProject" href="#"><?php session_start(); echo $_SESSION['groupName'];?></a></li>
+				<li class="active"><a id="currentProject" href="#"><?php session_start(); echo $_SESSION['groupName']; ?></a></li>
 				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
 				<li><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
 				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
-				<li><a id="groupMembers" href="../GroupMembers/groupMembers.html">Group Members</a></li>
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
 			</ul>	
 			<ul class="nav navbar-nav navbar-right">
 				<li><a id="user" href="../UserProfile/userProfile.html"><?php session_start(); echo $_SESSION['name']; ?></a></li>
@@ -95,23 +95,20 @@
 			
 				<div id="groupInformation" class="panel panel-primary">
 					<div class="panel-heading">
-						<h4>Group Information</h4>
+						<h4>Group Information</h4><button id="showForm" type="button" class="btn btn-primary" style="float:right;">Edit</button>
 					</div>
 					<div class="panel-body">
 						<div class="row col-xs-offset-1 col-xs-10">	
-							<h4 class="groupName">Group Name:<span></span></h4>
+							<h4 class="groupName">Group Name:<span class="padded"></span></h4>
 						</div>				  	
 						<div class="row col-xs-offset-1 col-xs-10">
-							<h4 class="groupCourse">Group Course:<span></span></h4>
+							<h4 class="groupCourse">Group Course:<span class="padded"></span></h4>
 						</div>
 						<div class="row col-xs-offset-1 col-xs-10">
-							<h4 class="creationDate">Group Creation Date:<span></span></h4>
+							<h4 class="creationDate">Group Creation Date:<span class="padded"></span></h4>
 						</div>
 						<div class="row col-xs-offset-1 col-xs-10">
-							<h4 class="description">Group Description:<span></span></h4>
-						</div>
-						<div class="row col-xs-offset-1 col-xs-10">
-							<button id="showForm">Edit Group Information</button>
+							<h4 class="description">Group Description:<span class="padded"></span></h4>
 						</div>							
 					</div>
 				</div>
@@ -123,20 +120,20 @@
 					<div class="panel-body">
 							<form class="col-xs-offset-1 col-xs-10" action="./updateGroup.php" method="POST">
 								<div class="form-group">
-								<label for="groupName">Group Name</label>
-								<input type="text" class="form-control" id="groupName" name="groupName" placeholder="Group Name" maxlength="25">
-							</div>
-							<div class="form-group">
-								<label for="course">Course</label>
-								<input type="text" class="form-control" id="course" name="course" placeholder="Course" maxlength="25">
-							</div>
-							<div class="form-group">
-								<label for="groupName">Group Description</label>
-								<input type="textarea" class="form-control" id="description" name="description" placeholder="Group Description" maxlength="100">
-							</div>
-							<div class="form-group">			
-						  		<button type="submit" id="button" class="btn btn-default">Update Group</button>
-							</div>
+									<label for="groupName">Group Name</label>
+									<input type="text" class="form-control" id="groupName" name="groupName" placeholder="Group Name" maxlength="25">
+								</div>
+								<div class="form-group">
+									<label for="course">Course</label>
+									<input type="text" class="form-control" id="course" name="course" placeholder="Course" maxlength="25">
+								</div>
+								<div class="form-group">
+									<label for="groupName">Group Description</label>
+									<input type="textarea" class="form-control" id="description" name="description" placeholder="Group Description" maxlength="100">
+								</div>
+								<div class="form-group">			
+							  		<button type="submit" id="button" class="btn btn-default">Update Group</button>
+								</div>
 							</form>
 					</div>
 				</div>

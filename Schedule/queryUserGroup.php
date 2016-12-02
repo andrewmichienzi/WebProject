@@ -5,11 +5,13 @@
 	
 	$userIdArray = array();
 	$availabiliesArray = array();
-	$availableDays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" "Saturday");
-	$updatedAvailableDays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" "Saturday");
-	$groupAvailability = array();
+	$availableDays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+	$updatedAvailableDays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+	$groupsAvailability = array();
+	$updatedGroupsAvailability = array();
 	
-	if ($sqlQuery = $dbConn->prepare("SELECT * FROM michiena.UserGroup WHERE groupId = ?"))
+	//query for all the users in this user's group
+	if ($sqlQuery = $dbConn->prepare("SELECT * FROM michiena.UserGroups WHERE groupId = ?"))
 	{
 		$sqlQuery->bind_param("i", $GLOBALS["groupId"]);
 		$sqlQuery->execute();
@@ -21,7 +23,8 @@
 			$userIdArray[] = $rowAsArray['userId']; 		
 		}
 	}
-		
+	
+	//query for the userSchedules for all users in this group
 	foreach($userIdArray as $userId)
 	{
 		if ($sqlQuery = $dbConn->prepare("SELECT * FROM michiena.UserSchedule WHERE userId = ?"))
@@ -33,29 +36,12 @@
 		
 			while ($rowAsArray = $result->fetch_assoc())
 			{
-				$availabilitiesArray[] = $rowAsArray['availability']; 		
-			}
-		}
-	}
-	
-	foreach($availableDays as $day)
-	{
-		foreach($availabilitiesArray as $availability)
-		{
-			$found = strpos($availability, $day)			
-			if($found === false)
-			{
-				unset($updatedAvailableDays[$day]);			
+				$availabilitiesArray[] = $rowAsArray['availability']; 	
 			}
 		}
 	}
 
-	foreach($availabilitiesArray as $availability)
-	{
-		$thisAvailabilitysDays = $availability.split(";");
-		
-		if (in_array(, $thisAvailabilitysDays))
-	}	
+	echo implode("<br>", $availabilitiesArray);
 		
 	function getDBConnection() {
 		

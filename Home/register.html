@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- Site-wide css -->
+	<link rel="stylesheet" href="../default.css">
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('button').click(function (event) {
+				event.preventDefault();
+				if($('#username').val() == "" || $('#password').val() == "" || $('#name').val() == ""  ) {
+					alert("Please fill out the name, username and passwords fields.");
+				} else {
+					$.ajax({
+						type: "GET",
+						url:"./registerUser.php?username="+$('#username').val()
+					}).done(function (data) {
+						if(data=="NO_USER") {
+							$.ajax({
+								type:"POST",
+								data: {username: $('#username').val(), name: $('#name').val()},
+								url: "./registerUser.php"
+							}).done(function (data) {
+								if(data == 'ERROR') {
+									alert("There was a problem with registration. Please try again later.");
+									window.location.href = "./login.html";
+								} else if (data == 'SUCCESS' ) {
+									alert("Your account has been created.");
+									$.ajax({
+										type: "POST",
+										url: "./login.php",
+										data: {username: $('#username').val(), noredirect: "true"}
+									}).done(function (data) {
+										if(data == "FAIL") {
+											alert("Failed to log in. Please try again later.");
+											window.location.href = "./login.html";
+										} else if(data == "SUCCESS") {
+											alert("Please finish filling out your profile.");
+											window.location.href = "../UserProfile/updateUserForm.html";
+										}
+									});
+								} 
+							});
+						} else if (data == "USER_EXISTS") {
+							alert("That username is taken. Please choose another.");
+						}
+					});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id = "header">
+		<div class="row">
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
+		</div>
+		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
+			<div class="nav navbar-nav">
+				<ul class="nav navbar-nav">
+					<li><a id="login" href="./login.html">Login</a></li>
+					<li class="active"><a id="register" href="#">Register</a></li>	
+				</ul>	
+			</div>
+		</nav>
+	</div>
+	
+	<div id="content" class=" col-xs-10 col-xs-offset-1">
+		<div class="panel panel-default">
+			<div id="contentBody" class="panel-body">
+				<div id="createUserPanel" class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Register</h4>
+					</div>
+					<div class="panel-body">
+						<form class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3"
+								action="./registerUser.php" method="POST">
+							<div class="form-group">
+								<label for="name">Name</label>
+								<input type="text" class="form-control" id="name" name="name" placeholder="Name">
+							</div>
+							<div class="form-group">
+								<label for="username">Username</label>
+								<input type="text" class="form-control" id="username" name="username" placeholder="Username">
+							</div>
+							<div class="form-group">
+								<label for="password">Password</label>
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+							</div>							
+							<div class="form-group">			
+						  		<button type="submit" class="btn btn-default">Register</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>

@@ -38,12 +38,12 @@
 						data: {	groupName: $('#groupName').val(),
 								course: $('#course').val(),
 								description: $('#description').val()},
-						url: 'createGroup.php'
+						url: './createGroup.php'
 					}).done(function (data) {
 						if(data =='ADDGROUPERROR' || data == 'SELECTGROUPIDERROR' || data == 'ADDINGUSERGROUPERROR') {
 							alert('There was a problem creating the group. Please try again later.');
 						} else if (data == 'SUCCESS') {
-							window.location.href = 'groupHome.html';
+							window.location.href = './groupHome.php';
 						}
 					});
 				}
@@ -71,10 +71,10 @@
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
 			<ul class="nav navbar-nav">
-				<li class="active"><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li class="active"><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
 			</ul>	
 			<ul class="nav navbar-nav navbar-right">
-				<li><a id="user" href="./UserProfile/userProfile.html">User Name</a></li>
+				<li><a id="user" href="../UserProfile/userProfile.html">User Name</a></li>
 				<li><a id="signout" href="../signout.php">Sign Out</a></li>
 			</ul>
 		</nav>

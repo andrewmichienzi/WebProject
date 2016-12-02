@@ -14,7 +14,7 @@
 		$GLOBALS["groupId"] = $_POST["txtGroupId"];
 		$GLOBALS["meetingId"] = $_POST["txtMeetingId"];
 		$GLOBALS["date"] = $_POST["txtMeetingDate"];
-		$GLOBALS["time"] = $_POST["txtMeetingTime"];
+		$GLOBALS["time"] = $_POST["txtMtgTimeStart"] . "-" . $_POST["txtMtgTimeEnd"];
 		$GLOBALS["description"] = $_POST["txtDescription"];
 		createMeeting();
 	}	
