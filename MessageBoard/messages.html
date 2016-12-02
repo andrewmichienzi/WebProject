@@ -22,16 +22,20 @@
 					var val1 = key;
 					var val2 = obj[key];
 					row = $("<div class='row'>");
-					row.append(val2);
-					$("#container").append(row);
+					row.append("<b>" +val2.date + "</b><br>");
+					row.append("<b>" + val2.user + "</b><br>");
+					row.append(val2.message + "<br><br>");
+					$("#container").prepend(row);
 				} 
 			} else {
-				$("#container").text("<p>There are no posts. Maybe you should make one.</p>");
+				var row = $("<div class='row'>");
+				$("#container").append(row);
+				row = $("<div class='row'>");
+				$row.append("There are no posts. Maybe you should make one.");
+				$("#container").append(row);
 			}
 			});
 	});
-	
-	
 	
 	function makePost() {
 		window.location.href = "postMessage.html";
@@ -66,7 +70,7 @@
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
 			<h3>Message Board</h3>
-			<button id="makePost" onclick="makePost()">Make Post</button>
+			<button id="makePost" onclick="makePost()">Make Post</button><br><br>
 				<div id="container">
 				</div>
 			</div>
