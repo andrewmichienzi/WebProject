@@ -6,9 +6,9 @@
 <body>
 	<form name = "frmCreateMeeting" action="createMeetingAction.php" onsubmit = "return formValidate()" method="POST">
 	   	Group ID:<br>
-		<input type = "text" name = "txtGroupId"  onchange="showGroupAvailability(this.value)"><br>
+		<input id="txtGroupId" type = "text" name = "txtGroupId"  onchange="showGroupAvailability(this.value)"><br>
 		Group Name:<br>
-		<input type = "text" name = "txtGroupName"><br>		
+		<input id="txtGroupName" type = "text" name = "txtGroupName"><br>		
 		<p id="txtHint">Schedule info will be listed here...</p>		
 		Date:<br>
 		<input type = "date" name = "txtMeetingDate" onchange="checkDayForAvailability(this.value)"><br>
@@ -51,6 +51,7 @@
 					$('#user').text(userInfo.name);
 					$("#txtGroupId").val(userInfo.groupId);
 					$("#txtGroupName").val(userInfo.groupName);
+					showGroupAvailability(userInfo.groupId);
 				}
 			});
 		}
