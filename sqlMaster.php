@@ -61,10 +61,11 @@
 		$testTask1 = array("1", "Task1", "0", "Test Description");
 		addTask($conn, $testTask1);
 		
-		$testMessage1 = array("1", "4", "20161130", "This is a test message.");
+		$testMessage1 = array("1", "4", "20160730", "This is a test message.");
 		addMessage($conn, $testMessage1);
-		$testMessage2 = array("1", "1", "20161201", "This is another message.");
+		$testMessage2 = array("1", "1", "20160801", "This is another message.");
 		addMessage($conn, $testMessage2);
+<<<<<<< HEAD
 
 		$testUserSchedule1 = array("1", "Monday- 00:00-02:00; Tuesday- 23:00-00:00; Wednesday- 00:00-02:00");
 		addUserSchedule($conn, $testUserSchedule1);
@@ -81,6 +82,22 @@
 		addGroupMeeting($conn, $testGroupMeeting2);
 
 
+=======
+		$testMessage3 = array("1", "1", "20160908", "I love CIS371!");
+		addMessage($conn, $testMessage3);
+		$testMessage4 = array("1", "3", "20161001", "Yay Webapps!");
+		addMessage($conn, $testMessage4);
+		$testMessage5 = array("2", "2", "20161201", "Hello.");
+		addMessage($conn, $testMessage5);
+		$testMessage6 = array("2", "3", "20161201", "Hi.");
+		addMessage($conn, $testMessage6);
+		$testMessage7 = array("1", "4", "20161122", "Hi everyone!");
+		addMessage($conn, $testMessage7);
+		$testMessage8 = array("2", "1", "20161225", "Look at this cool message.");
+		addMessage($conn, $testMessage8);
+		$testMessage9 = array("1", "3", "20161201", "TEST.");
+		addMessage($conn, $testMessage9);
+>>>>>>> 074bf21594baa4bd7887fabdfaf08be24b4f85fe
 	}
 
 	function createUsersTable($conn){
