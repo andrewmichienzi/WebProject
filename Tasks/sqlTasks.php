@@ -78,7 +78,7 @@
 			{
 				echo ' checked';
 			}
-			echo' id="checkBox'.$taskId.'" onclick="checkBoxTask('.$taskId.');"/></td>';
+			echo' id="checkBox'.$taskId.'" class="table" onclick="checkBoxTask('.$taskId.');"/></td>';
 			echo '<td><input type="button" class="deleteButton" value="Delete" onclick="deleteTask('.$taskId.');"/></td>';
 			echo "</tr>";
 		}	

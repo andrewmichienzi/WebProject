@@ -27,6 +27,9 @@
 
 	function addSampleData($conn)
 	{
+		$testUserNum = 1;
+		
+
 		$testUser0 = array("Andrew Michienzi", "michiena", "michiena@mail.gvsu.edu", "6163894812");
 		addUser($conn, $testUser0);
 		$testUser1 = array("Katie Mulder", "muldkate", "muldkate@mail.gvsu.edu", "(123)-456-7890");
