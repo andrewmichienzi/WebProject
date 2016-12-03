@@ -4,9 +4,9 @@
 <body>
 	<form action="createUserScheduleAction.php" method = "post">
 		User ID:<br>
-		<input type = "text" name = "txtUserId"><br><br>
+		<input id = "txtUserId" type = "text" name = "txtUserId" readonly><br><br>
 		Username:<br>
-		<input type = "text" name = "txtUsername"></input><br><br>	
+		<input id = "txtUserName" type = "text" name = "txtUsername" readonly></input><br><br>	
 		Sunday- From:
 		<input type = "time" name = "txtSundayFrom">
 		To:
@@ -37,5 +37,26 @@
 		<input type = "time" name = "txtSaturdayTo"><br><br>
 		<input type = "submit" value = "Submit"></input>
 	</form>
+	<script>
+               $(document).ready(function () {
+			var userInfo;
+			getSessionInfo(userInfo);
+		});
+
+		function getSessionInfo(userInfo) {
+			$.ajax("../getSessionInformationAjax.php")
+			.done(function(data) {
+				data = JSON.parse(data);
+				if(data.userVars == 'false') {
+					window.location.href = "../login.html";
+				} else {
+					userInfo = data;
+					$('#user').text(userInfo.name);
+					$('#txtUserId').val(userInfo.userId);
+					$('#txtUserName').val(userInfo.userName);
+				}
+			});
+		}
+</script>
 </body>
 </html>

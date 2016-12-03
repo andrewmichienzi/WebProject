@@ -23,6 +23,7 @@
 		createUserGroupsTable($conn);
 		createMessageBoardTable($conn);
 		createGroupMeetingTable($conn);
+		createUserScheduleTable($conn);
 	}	
 
 	function addSampleData($conn)
@@ -64,10 +65,42 @@
 		$testTask1 = array("1", "Task1", "0", "Test Description");
 		addTask($conn, $testTask1);
 		
-		$testMessage1 = array("1", "4", "20161130", "This is a test message.");
+		$testMessage1 = array("1", "4", "20160730", "This is a test message.");
 		addMessage($conn, $testMessage1);
-		$testMessage2 = array("1", "1", "20161201", "This is another message.");
+		$testMessage2 = array("1", "1", "20160801", "This is another message.");
 		addMessage($conn, $testMessage2);
+
+
+		$testUserSchedule1 = array("1", "Monday- 00:00-02:00; Tuesday- 23:00-00:00; Wednesday- 00:00-02:00");
+		addUserSchedule($conn, $testUserSchedule1);
+		$testUserSchedule2 = array("2", "Monday- 10:00-14:00; Wednesday- 14:00-16:00;");
+		addUserSchedule($conn, $testUserSchedule2);
+		$testUserSchedule3 = array("3", "Tuesday- 12:00-15:00; Thursday- 14:00-16:00;");
+		addUserSchedule($conn, $testUserSchedule3);
+		$testUserSchedule4 = array("4", "Saturday- 17:00-21:00;");
+		addUserSchedule($conn, $testUserSchedule4);
+
+		$testGroupMeeting1 = array("1", "1", "Web App: Groupee", "2016-12-13", "23:30-00:00", "going over website layout ideas");
+		addGroupMeeting($conn, $testGroupMeeting1);
+		$testGroupMeeting2 = array("2", "1", "Web App: Groupee", "2016-12-15", "14:00-15:00", "going over AJAX stuff");
+		addGroupMeeting($conn, $testGroupMeeting2);
+
+
+		$testMessage3 = array("1", "1", "20160908", "I love CIS371!");
+		addMessage($conn, $testMessage3);
+		$testMessage4 = array("1", "3", "20161001", "Yay Webapps!");
+		addMessage($conn, $testMessage4);
+		$testMessage5 = array("2", "2", "20161201", "Hello.");
+		addMessage($conn, $testMessage5);
+		$testMessage6 = array("2", "3", "20161201", "Hi.");
+		addMessage($conn, $testMessage6);
+		$testMessage7 = array("1", "4", "20161122", "Hi everyone!");
+		addMessage($conn, $testMessage7);
+		$testMessage8 = array("2", "1", "20161225", "Look at this cool message.");
+		addMessage($conn, $testMessage8);
+		$testMessage9 = array("1", "3", "20161201", "TEST.");
+		addMessage($conn, $testMessage9);
+
 	}
 
 	function createUsersTable($conn){
@@ -129,7 +162,7 @@
 		$sql = "CREATE TABLE UserSchedule (userId INT NOT NULL, availability VARCHAR(500), PRIMARY KEY(userId))";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
-			die('Creating Message Board Table issue:  ' . mysql_error());
+			die('Creating User Schedule Table issue:  ' . mysql_error());
 		}
 	}
 
@@ -237,6 +270,42 @@
 		if (! $retVal){
 			die('Adding to MessageBoard Table issue:  ' . mysql_error());
 		}
+	}
+
+	function addUserSchedule($conn, $args)
+	{
+		/*	
+			Adding User Schedule to UserSchedule table
+			
+			Args
+				0 userId
+				1 availability
+		*/
+	
+		$sql = "INSERT INTO UserSchedule (userId, availability) VALUES ('" . $args[0] . "', '" . $args[1] . "');";
+		$retVal = mysql_query($sql, $conn);
+		if (! $retVal){
+			die('Adding to UserSchedule Table issue:  ' . mysql_error());
+	}
+
+	function addGroupMeeting($conn, $args)
+	{
+		/*
+			Adding Group Meetin gto GroupMeeting table
+			
+			Args
+				0 meetingId
+				1 groupId
+				2 groupName
+				3 meetingDate
+				4 meetingTime
+				5 meetingDescription
+		*/
+
+		$sql = "INSERT INTO GroupMeeting (meetingId, groupId, groupName, meetingDate, meetingTime, meetingDescription) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "', '" . $args[3] . "', '" . $args[4] . "', '" . $args[5] . "');";
+		$retVal = mysql_query($sql, $conn);
+		if (! $retVal){
+			die('Adding to GroupMeeting Table issue:  ' . mysql_error());
 	}
 	
 	function printTables($conn){
