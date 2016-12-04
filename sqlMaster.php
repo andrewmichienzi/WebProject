@@ -63,7 +63,17 @@ if($conn->connection_error) {
 		$addToGroup6 = array("1", "4");
 		addUserToGroup($conn, $addToGroup6);
 
-		$testTask1 = array("1", "Task1", "0", "Test Description");
+		$testTask1 = array("1", "This is a task 1", "2", "Test Description");
+		addTask($conn, $testTask1);
+		$testTask1 = array("1", "This is a task 2", "2", "Test Description");
+		addTask($conn, $testTask1);
+		$testTask1 = array("1", "This is a task 3", "2", "Test Description");
+		addTask($conn, $testTask1);
+		$testTask1 = array("3", "This is a task 4", "2", "Test Description");
+		addTask($conn, $testTask1);
+		$testTask1 = array("3", "This is a task 5", "2", "Test Description");
+		addTask($conn, $testTask1);
+		$testTask1 = array("3", "This is a task 6", "2", "Test Description");
 		addTask($conn, $testTask1);
 		
 		$testMessage1 = array("1", "4", "20160730", "This is a test message.");
