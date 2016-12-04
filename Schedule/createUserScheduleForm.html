@@ -1,44 +1,25 @@
 <!DOCTYPE html>
 <head>
-</head>
-<body>
-	<form action="createUserScheduleAction.php" method = "post">
-		User ID:<br>
-		<input id = "txtUserId" type = "text" name = "txtUserId" readonly><br><br>
-		Username:<br>
-		<input id = "txtUserName" type = "text" name = "txtUsername" readonly></input><br><br>	
-		Sunday- From:
-		<input type = "time" name = "txtSundayFrom">
-		To:
-		<input type = "time" name = "txtSundayTo"><br><br>
-		Monday- From:
-		<input type = "time" name = "txtMondayFrom">
-		To:
-		<input type = "time" name = "txtMondayTo"><br><br>
-		Tuesday- From:
-		<input type = "time" name = "txtTuesdayFrom">
-		To:
-		<input type = "time" name = "txtTuesdayTo"><br><br>
-		Wednesday- From:
-		<input type = "time" name = "txtWednesdayFrom">
-		To:
-		<input type = "time" name = "txtWednesdayTo"><br><br>
-		Thursday- From:
-		<input type = "time" name = "txtThursdayFrom">
-		To:
-		<input type = "time" name = "txtThursdayTo"><br><br>
-		Friday- From:
-		<input type = "time" name = "txtFridayFrom">
-		To:
-		<input type = "time" name = "txtFridayTo"><br><br>
-		Saturday- From:
-		<input type = "time" name = "txtSaturdayFrom">
-		To:
-		<input type = "time" name = "txtSaturdayTo"><br><br>
-		<input type = "submit" value = "Submit"></input>
-	</form>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">	
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Site-wide css -->
+	<link rel="stylesheet" href="../default.css">
+	<style>
+		.form-group {
+			margin-bottom: 2em;
+		}
+		label {
+			font-weight: normal;
+		}
+	</style>
 	<script>
-               $(document).ready(function () {
+        $(document).ready(function () {
 			var userInfo;
 			getSessionInfo(userInfo);
 		});
@@ -48,15 +29,105 @@
 			.done(function(data) {
 				data = JSON.parse(data);
 				if(data.userVars == 'false') {
-					window.location.href = "../login.html";
+					window.location.href = "../Home/login.html";
 				} else {
 					userInfo = data;
 					$('#user').text(userInfo.name);
+					$('#currentProject').text(userInfo.groupName);
 					$('#txtUserId').val(userInfo.userId);
-					$('#txtUserName').val(userInfo.userName);
+					$('#txtUserName').val(userInfo.username);
 				}
 			});
 		}
-</script>
+	</script>
+</head>
+<body>
+	<div id = "header">
+		<div class="row">
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
+		</div>
+		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
+			<ul id="leftNav" class="nav navbar-nav">
+				<li><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li><a id="currentProject" href="../Home/groupHome.php"></a></li>
+				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
+				<li class="active"><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
+				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
+				<li><a id="signout" href="../signout.php">Log Out</a></li>
+			</ul>	
+		</nav>
+	</div>
+	<div id="content" class=" col-xs-10 col-xs-offset-1">
+		<div class="panel panel-default">
+			<div id="contentBody" class="panel-body">				
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Create a Schedule</h4>
+					</div>
+					<div id="container" class="panel-body">
+						<form class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3" action="createUserScheduleAction.php" method = "post">
+							<input id="txtUserId" type="hidden" name="txtUserId" readonly/>
+							<input id="txtUserName" type="hidden" name = "txtUsername" readonly/>
+							<div class="form-group">
+								<h4>Sunday</h4>
+								<label for="txtSundayFrom">From:</label>
+								<input type = "time" name = "txtSundayFrom">
+								<label for="txtSundayTo">To:</label>
+								<input type = "time" name = "txtSundayTo">
+							</div>	
+							<div class="form-group">
+								<h4>Monday</h4>
+								<label for="txtMondayFrom">From:</label>
+								<input type = "time" name = "txtMondayFrom">
+								<label for="txtMondayTo">To:</label>
+								<input type = "time" name = "txtMondayTo">
+							</div>	
+							<div class="form-group">
+								<h4>Tuesday</h4>
+								<label for="txtTuesdayFrom">From:</label>
+								<input type = "time" name = "txtTuesdayFrom">
+								<label for="txtTuesdayTo">To:</label>
+								<input type = "time" name = "txtTuesdayTo">
+							</div>	
+							<div class="form-group">
+								<h4>Wednesday</h4>
+								<label for="txtWednesdayFrom">From:</label>
+								<input type = "time" name = "txtWednesdayFrom">
+								<label for="txtWednesdayTo">To:</label>
+								<input type = "time" name = "txtWednesdayTo">
+							</div>	
+							<div class="form-group">
+								<h4>Thursday</h4>
+								<label for="txtThursdayFrom">From:</label>
+								<input type = "time" name = "txtThursdayFrom">
+								<label for="txtThursdayTo">To:</label>
+								<input type = "time" name = "txtThursdayTo">
+							</div>	
+							<div class="form-group">
+								<h4>Friday</h4>
+								<label for="txtThursdayFrom">From:</label>
+								<input type = "time" name = "txtFridayFrom">
+								<label for="txtThursdayTo">To:</label>
+								<input type = "time" name = "txtFridayTo">
+							</div>	
+							<div class="form-group">
+								<h4>Saturday</h4>
+								<label for="txtThursdayFrom">From:</label>
+								<input type = "time" name = "txtSaturdayFrom">
+								<label for="txtThursdayTo">To:</label>
+								<input type = "time" name = "txtSaturdayTo">
+							</div>
+							<div class="form-group">
+								<input class="btn btn-default" type = "submit" value = "Submit"></input>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
-</html>

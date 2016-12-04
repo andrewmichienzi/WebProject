@@ -5,8 +5,9 @@
 	$dbname = "michiena";
 
 	$conn = mysql_connect($servername, $username, $password);
-	if($conn->connection_error)
+if($conn->connection_error) {
 		die("Connection failed: " . $conn->connect_error);
+}
 
 	mysql_select_db($dbname);
 	
@@ -50,7 +51,7 @@
 		addGroup($conn, $testGroup3);
 		
 		$addToGroup1 = array("2", "1");
-		addUserToGroup($conn, $testGroup1);
+		addUserToGroup($conn, $addToGroup1);
 		$addToGroup2 = array("3", "1");
 		addUserToGroup($conn, $addToGroup2);
 		$addToGroup3 = array("4", "1");
@@ -286,6 +287,7 @@
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding to UserSchedule Table issue:  ' . mysql_error());
+		}
 	}
 
 	function addGroupMeeting($conn, $args)
@@ -306,6 +308,7 @@
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding to GroupMeeting Table issue:  ' . mysql_error());
+		}
 	}
 	
 	function printTables($conn){
@@ -339,5 +342,7 @@
 			echo '<br>';
 		}
 	}
+		
 ?>
+
 

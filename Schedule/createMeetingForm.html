@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">	
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
-<body>
-	<form name = "frmCreateMeeting" action="createMeetingAction.php" onsubmit = "return formValidate()" method="POST">
-	   	Group ID:<br>
-		<input id="txtGroupId" type = "text" name = "txtGroupId"  onchange="showGroupAvailability(this.value)"><br>
-		Group Name:<br>
-		<input id="txtGroupName" type = "text" name = "txtGroupName"><br>		
-		<p id="txtHint">Schedule info will be listed here...</p>		
-		Date:<br>
-		<input type = "date" name = "txtMeetingDate" onchange="checkDayForAvailability(this.value)"><br>
-		<p id="txtDayError"></p>
-		From: <input type = "time" name = "txtMtgTimeStart" onchange = "checkTimeForAvailability(this.value,document.forms['frmCreateMeeting']['txtMtgTimeEnd'].value)">
-		To: <input type = "time" name = "txtMtgTimeEnd" onchange="checkTimeForAvailability(document.forms['frmCreateMeeting']['txtMtgTimeStart'].value, this.value)"><br>
-		<p id="txtTimeError"></p>
-		Description:<br>
-		<textarea rows= "6" cols="50" name="txtDescription"></textarea><br>
-		<input type = "submit" value = "Submit">
-		<br>
-		<br>
-		<p id="txtError"></p>	
-	</form>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Site-wide css -->
+	<link rel="stylesheet" href="../default.css">
+	<style>
+		.form-group {
+			margin-bottom: 2em;
+		}
+		label {
+			font-weight: normal;
+		}
+	</style>
 	<script>
 		var weekday = new Array(7);
 			weekday[0]=  "Monday";
@@ -49,6 +44,8 @@
 				} else {
 					userInfo = data;
 					$('#user').text(userInfo.name);
+					$('#currentProject').text(userInfo.groupName);
+					$('#groupName').text(userInfo.groupName);
 					$("#txtGroupId").val(userInfo.groupId);
 					$("#txtGroupName").val(userInfo.groupName);
 					showGroupAvailability(userInfo.groupId);
@@ -56,21 +53,18 @@
 			});
 		}
 
-		function formValidate()
-		{		
+		function formValidate() {		
 			var errorMessage = "";
 			var isValid = true;
 			
 			errorMessage = formComplete();	
-			if (errorMessage.localeCompare("") != 0)
-			{
+			if (errorMessage.localeCompare("") != 0) {
 				alert(errorMessage);
 				isValid = false;
 				
 				return isValid;
 			}
-			if (document.getElementById("txtTimeError").innerHTML.localeCompare("") != 0 || document.getElementById("txtDateError").innerHTML.localeCompare("") != 0)
-			{
+			if (document.getElementById("txtTimeError").innerHTML.localeCompare("") != 0 || document.getElementById("txtDateError").innerHTML.localeCompare("") != 0) {
 				alert("There appears to be conflicts between the Meeting Date/Time below and your group's availability. The Group Meeting cannot currently be submitted as is.");			
 				isValid = false;
 				return isValid;
@@ -78,8 +72,7 @@
 			return isValid;
 		}
 
-		function showGroupAvailability(idVal)
-		{
+		function showGroupAvailability(idVal) {
 			$.ajax({
 					type: "POST",
 					data: { groupId: idVal},
@@ -92,8 +85,7 @@
 			});
 		}
 		
-		function checkDayForAvailability(dateVal)
-		{
+		function checkDayForAvailability(dateVal) {
 			var dVal = new Date(dateVal);
 			var dValInDay = weekday[dVal.getDay()];
 		
@@ -103,17 +95,13 @@
 				document.getElementById("txtDayError").innerHTML = dValInDay + " is not in your group's availability!";
 		
 			checkTimeForAvailability(document.forms['frmCreateMeeting']['txtMtgTimeStart'].value, document.forms['frmCreateMeeting']['txtMtgTimeEnd'].value);
-
 		}
 
-		function checkTimeForAvailability(mtgStartStr, mtgEndStr)
-		{
-			//		
+		function checkTimeForAvailability(mtgStartStr, mtgEndStr) {	
 			if (mtgStartStr.localeCompare("") == 0 || mtgEndStr.localeCompare("") == 0)
 				return;	
 
-			if (mtgStartStr.localeCompare(mtgEndStr) == 0)
-			{
+			if (mtgStartStr.localeCompare(mtgEndStr) == 0) {
 				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: Please select a valid length of time for the meeting.";	
 				return;		
 			}	
@@ -124,14 +112,11 @@
 			var availabilityArray = availability.split("<br>");
 			var availableDay;
 			var validTime = false;
-			
-			//			
-			for (var i = 0; i < availabilityArray.length; i++)
-			{
-				if(availabilityArray[i].includes(dValInDay))
-				{
+					
+			for (var i = 0; i < availabilityArray.length; i++) {
+				if(availabilityArray[i].includes(dValInDay)) {
 					availableDay = availabilityArray[i];
-					//
+
 					var availableWindow = availableDay.split("- ")[1];
 					var availableStartString = availableWindow.split("-")[0];
 					var availableEndString = availableWindow.split("-")[1];
@@ -139,7 +124,7 @@
 					var availableStartMinInt = parseInt(availableStartString.split(":")[1], 10);
 					var availableEndHourInt = parseInt(availableEndString.split(":")[0], 10);
 					var availableEndMinInt = parseInt(availableEndString.split(":")[1], 10);
-					//
+					
 					var mtgStartHourInt = parseInt(mtgStartStr.split(":")[0], 10);
 					var mtgStartMinInt = parseInt(mtgStartStr.split(":")[1], 10);
 					var mtgEndHourInt = parseInt(mtgEndStr.split(":")[0], 10);
@@ -147,38 +132,30 @@
 			
 					//check if the meeting has a valid start but invalid end or vice versa
 					if ((mtgStartHourInt > availableStartHourInt && (mtgStartHourInt > availableEndHourInt || mtgStartHourInt > mtgEndHourInt)) || 
-						(mtgEndHourInt < availableEndHourInt && (mtgEndHourInt < availableStartHourInt || mtgEndHourInt < mtgStartHourInt)))
-					{
+						(mtgEndHourInt < availableEndHourInt && (mtgEndHourInt < availableStartHourInt || mtgEndHourInt < mtgStartHourInt))) {
 						continue;
 					}
 					// check if the meeting start and end values seem to be contradictory with respect to themselves i.e start before you finish, etc.
 					else if((mtgEndHourInt < mtgStartHourInt && mtgEndHourInt > availableEndHourInt) || 
-					   (mtgStartHourInt > mtgEndHourInt && mtgStartHourInt < availableStartHourInt))
-					{
+					   (mtgStartHourInt > mtgEndHourInt && mtgStartHourInt < availableStartHourInt)) {
 						continue;
 					}
 					//check if the meeting time is just outside of the available window of time by a few minutes
 					else if ((mtgStartHourInt == availableStartHourInt || mtgEndHourInt == availableEndHourInt) &&
-						mtgStartHourInt < availableStartHourInt || mtgEndHourInt > availableEndHourInt)
-					{
+						mtgStartHourInt < availableStartHourInt || mtgEndHourInt > availableEndHourInt) {
 						continue;
 					} 			
 					// if the hours fit within the window, but still need to verify that the minutes do as well 
-					else if (availableStartHourInt <= mtgStartHourInt && availableEndHourInt >= mtgEndHourInt)
-					{
+					else if (availableStartHourInt <= mtgStartHourInt && availableEndHourInt >= mtgEndHourInt) {
 						if ((availableStartHourInt == mtgStartHourInt && availableStartMinInt > mtgStartMinInt) || 
 							(availableEndHourInt == mtgEndHourInt && availableEndMinInt < mtgEndMinInt) 
-							|| (mtgEndHourInt < availableStartHourInt && mtgEndHourInt > availableEndHourInt))
-						{
+							|| (mtgEndHourInt < availableStartHourInt && mtgEndHourInt > availableEndHourInt)) {
 							continue;
 						}
 					}
-					
 					validTime = true;
 					break;
-				}
-				else 
-				{
+				} else {
 					continue;				
 				}						
 			}
@@ -190,37 +167,99 @@
 				document.getElementById("txtTimeError").innerHTML = "Time Conflict Error: The meeting date and time you chose does not appear to be within anyone's availability. Please select an appropriate time for your group.";
 		}
 
-		function formComplete()
-		{
+		function formComplete() {
 			var controlVal = "";
 			var errorMessage = "";
 		
 			controlVal = document.forms["frmCreateMeeting"]["txtMeetingDate"].value;
-			if (controlVal == null || controlVal == "")
-			{
+			if (controlVal == null || controlVal == "") {
 				errorMessage += "Date must be filled out.\n";	
 			}
 				
 			controlVal = document.forms["frmCreateMeeting"]["txtMtgTimeStart"].value;
-			if (controlVal == null || controlVal == "")
-			{
+			if (controlVal == null || controlVal == "") {
 				errorMessage += "Time Start must be filled out.\n";	
 			}
 
 			controlVal = document.forms["frmCreateMeeting"]["txtMtgTimeEnd"].value;
-			if (controlVal == null || controlVal == "")
-			{
+			if (controlVal == null || controlVal == "") {
 				errorMessage += "Time End must be filled out.\n";	
 			}
 
 			controlVal = document.forms["frmCreateMeeting"]["txtDescription"].value;
-			if (controlVal == null || controlVal == "")
-			{
+			if (controlVal == null || controlVal == "") {
 				errorMessage += "Description must be filled out.\n";	
 			}
-			
 			return errorMessage;
 		}
 	</script>
+</head>
+<body>
+	<div id = "header">
+		<div class="row">
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
+		</div>
+		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
+			<ul id="leftNav" class="nav navbar-nav">
+				<li><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li><a id="currentProject" href="../Home/groupHome.php"></a></li>
+				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
+				<li class="active"><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
+				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
+				<li><a id="signout" href="../signout.php">Log Out</a></li>
+			</ul>	
+		</nav>
+	</div>
+	<div id="content" class=" col-xs-10 col-xs-offset-1">
+		<div class="panel panel-default">
+			<div id="contentBody" class="panel-body">				
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Schedule a Meeting</h4>
+					</div>
+					<div id="container" class="panel-body">
+						<form class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3" name="frmCreateMeeting" 
+							action="createMeetingAction.php" onsubmit="return formValidate()" method="POST">
+							<div class="hidden">
+							   	Group ID:<br>
+								<input id="txtGroupId" type = "text" name = "txtGroupId"  onchange="showGroupAvailability(this.value)"><br>
+								Group Name:<br>
+								<input id="txtGroupName" type = "text" name = "txtGroupName"><br>		
+							</div>	
+							<div class="form-group">
+								<p id="txtHint">Schedule information will be listed here...</p>
+							</div>
+							<div class="form-group">
+								<h4>Please Enter Meeting Information:</h4>
+								<label for="txtMeetingDate">Date:</label>
+								<input type = "date" name = "txtMeetingDate" onchange="checkDayForAvailability(this.value)">
+								<p id="txtDayError"></p>
+								<label for="txtMtgTimeStart">From:</label>
+								<input type = "time" name = "txtMtgTimeStart" 
+									onchange = "checkTimeForAvailability(this.value,document.forms['frmCreateMeeting']['txtMtgTimeEnd'].value)">
+								<label for="txtMtgTimeEnd">To:</label>
+								<input type = "time" name = "txtMtgTimeEnd" 
+									onchange="checkTimeForAvailability(document.forms['frmCreateMeeting']['txtMtgTimeStart'].value, this.value)">
+								<p id="txtTimeError"></p>
+							</div>							
+							<div class="form-group">
+								<label for="txtSundayFrom">Description:</label>
+								<textarea rows= "6" cols="50" name="txtDescription"></textarea>
+							</div>
+							<div class="form-group">
+								<input type = "submit" value = "Submit">
+							</div>
+							<div class="form-group">
+								<p id="txtError"></p>	
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
-</html>

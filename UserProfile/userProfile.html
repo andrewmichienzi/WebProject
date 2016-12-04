@@ -1,56 +1,74 @@
 <!DOCTYPE html>
 <head>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Site-wide css -->
+	<link rel="stylesheet" href="../default.css">
 	<style>
-		body {
-			background: url("../background.jpg");
+		h4 {
+			display: inline-block;
 		}
-		#header {
-			margin-top: 2%;
-		}
-		.bottomMargin {
-			margin-bottom:1em;
-		}
-		#content {
-			padding:0;
+		.padded {
+			padding-left: 1em;
 		}
 	</style>
 	<script>
-	$(document).ready(function(){
-		$.ajax("getUserProfileInfo.php")
-			.done(function(data) {
+		$(document).ready(function(){
+			var userInfo;
+			getSessionInfo(userInfo);
+			$.ajax("./getUserProfileInfo.php")
+				.done(function(data) {		
 					var userData = JSON.parse(data);
 					$("#name").text(userData.name);
 					$("#phone").text(userData.phone);
 					$("#email").text(userData.email);
 					setGroupNames();
-				}
-			)
-	});
-	
-	function setGroupNames(userInfo) {
-		$.ajax("../getUserGroups.php")
-		.done(function (data) {
-			var obj = JSON.parse(data);
-			var groups = "";
-			for(key in obj){
-				groups = groups + obj[key] + "<br>";
-			};
-			document.getElementById("groups").innerHTML = groups;
+			});
 		});
-	}
-	
-	function update(){
-		window.location.href = "updateUserForm.html";	
-	}
 
+		function getSessionInfo(userInfo) {
+			$.ajax("../getSessionInformationAjax.php")
+			.done(function(data) {
+				data = JSON.parse(data);
+				if(data.userVars == 'false') {
+					window.location.href = "../Home/login.html";
+				} else {
+					userInfo = data;
+					$('#user').text(userInfo.name);
+					if(userInfo.groupVar == 'true') {
+						$('#currentProject').text(userInfo.groupName);
+					} else {
+						$('#currentProject').remove();
+						$('#messages').remove();
+						$('#schedule').remove();
+						$('#tasks').remove();
+						$('#groupMembers').remove();
+					}
+				}
+			});
+		}
+	
+		function setGroupNames(userInfo) {
+			$.ajax("../getUserGroups.php")
+			.done(function (data) {
+				var obj = JSON.parse(data);
+				var groups = "";
+				for(key in obj){
+					groups = groups + '<span id="groups" class="padded">'+obj[key] + "</span><br>";
+				};
+				document.getElementById("groups").innerHTML = groups;
+			});
+		}
+	
+		function update(){
+			window.location.href = "updateUserForm.html";	
+		}
 	</script>
 </head>
 <body>
@@ -59,34 +77,45 @@
 				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
-			<div class="nav navbar-nav">
-				<ul class="nav navbar-nav">
-					<li><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
-					<li><a id="currentProject" href="#">Project A</a></li>
-					<li><a id="messages" href="messages.html">Message Board</a></li>
-					<li><a id="schedule" href="schedules.html">Schedules</a></li>
-					<li><a id="tasks" href="tasks.html">Tasks</a></li>
-					<li><a id="groupMembers" href="groupMembers.html">Group Members</a></li>
-					<li class="active"><a id="user" href="userProfile.html" href="#">User Name</a></li>
-				</ul>	
-			</div>
+			<ul id="leftNav" class="nav navbar-nav">
+				<li class="active"><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li><a id="currentProject" href="../Home/groupHome.php"></a></li>
+				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
+				<li><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
+				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
+				<li><a id="signout" href="../signout.php">Log Out</a></li>
+			</ul>	
 		</nav>
 	</div>
 	
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
-			Name:<br>
-				<p id="name"></p>
-			Phone:<br>
-				<p id="phone"></p>
-			Email:<br>
-				<p id="email"></p>
-			Groups:<br>
-				<p id="groups"></p>
-				<button id="update" onclick="update()">Update</button>
+				<div id="nformation" class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>My Profile</h4><button id="update" onclick="update()" type="button" class="btn btn-primary" style="float:right;">Update</button>
+					</div>
+					<div class="panel-body">
+						<div class="row col-xs-offset-1 col-xs-10">	
+							<h4 class="groupName">Name:<span  id="name" class="padded"></span></h4>
+						</div>				  	
+						<div class="row col-xs-offset-1 col-xs-10">
+							<h4 class="groupCourse">Phone:<span id="phone" class="padded"></span></h4>
+						</div>
+						<div class="row col-xs-offset-1 col-xs-10">
+							<h4 class="creationDate">Email:<span id="email" class="padded"></span></h4>
+						</div>
+						<div class="row col-xs-offset-1 col-xs-10">
+							<h4 class="description">Groups:<br><div id="groups"/></h4>
+							
+						</div>							
+					</div>
+				</div>				
 			</div>
 		</div>
 	</div>
-	
 </body>

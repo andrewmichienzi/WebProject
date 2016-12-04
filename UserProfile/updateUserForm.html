@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <head>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Site-wide css -->
+	<link rel="stylesheet" href="../default.css">
 	<style>
-		body {
-			background: url("../background.jpg");
+		.padded {
+			padding-left: 1em;
 		}
-		#header {
-			margin-top: 2%;
+		.glyphicon-remove {
+			padding-right: 1em;
 		}
-		.bottomMargin {
-			margin-bottom:1em;
-		}
-		#content {
-			padding:0;
+		.extraMargin {
+			margin-top: 3em;
 		}
 	</style>
 	<script>
 	$(document).ready(function(){
-		$.ajax("getUserProfileInfo.php")
+		var userInfo;
+		getSessionInfo(userInfo);
+		$.ajax("./getUserProfileInfo.php")
 			.done(function(data) {
 					var userData = JSON.parse(data);
 					$("#name").val(userData.name);
@@ -41,10 +42,33 @@
 			var obj = JSON.parse(data);
 			var groups = "";
 			for(key in obj){
-				groups = groups + obj[key] + " ";
-				groups = groups + "<button id='leave' onclick='leaveGroup("+key+")'>Leave Group</button><br>";
+				groups = groups + "<div class='form-group'><button id='leave' onclick='leaveGroup("+key+
+					")' class='btn btn-default'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Leave Group: ";
+				groups = groups + obj[key] + "</button></div>";
 			};
 			document.getElementById("groups").innerHTML = groups;
+		});
+	}
+
+	function getSessionInfo(userInfo) {
+		$.ajax("../getSessionInformationAjax.php")
+		.done(function(data) {
+			data = JSON.parse(data);
+			if(data.userVars == 'false') {
+				window.location.href = "../Home/login.html";
+			} else {
+				userInfo = data;
+				$('#user').text(userInfo.name);
+				if(userInfo.groupVar == 'true') {
+					$('#currentProject').text(userInfo.groupName);
+				} else {
+					$('#currentProject').remove();
+					$('#messages').remove();
+					$('#schedule').remove();
+					$('#tasks').remove();
+					$('#groupMembers').remove();
+				}
+			}
 		});
 	}
 	
@@ -81,36 +105,52 @@
 				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
-			<div class="nav navbar-nav">
-				<ul class="nav navbar-nav">
-					<li><a id="home" href="home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
-					<li><a id="currentProject" href="#">Project A</a></li>
-					<li class="active"><a id="messages" href="messages.html">Message Board</a></li>
-					<li><a id="schedule" href="schedules.html">Schedules</a></li>
-					<li><a id="tasks" href="tasks.html">Tasks</a></li>
-					<li><a id="groupMembers" href="groupMembers.html">Group Members</a></li>
-					<li><a id="user" href="userProfile.html" href="#">User Name</a></li>
-				</ul>	
-			</div>
+			<ul id="leftNav" class="nav navbar-nav">
+				<li class="active"><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li><a id="currentProject" href="../Home/groupHome.php"></a></li>
+				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
+				<li><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
+				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
+				<li><a id="signout" href="../signout.php">Log Out</a></li>
+			</ul>	
 		</nav>
 	</div>
 	
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
-				<div>
-				<form name="profileForm" onsubmit="submitUpdate()" method="post">
-					Name: <br>
-					<input type="text" name="name" id="name"><br>
-					Phone Number: <br>
-					<input type="text" name="phone" id="phone"><br>
-					Email: <br>
-					<input type="text" name="email" id="email"><br>
-					Groups: <br>
-					<p id="groups"></p>
-					<input type="submit" value="Submit">
-					<p id="error"></p>
-				</form>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Update My Profile</h4>
+					</div>
+					<div class="panel-body">
+							<form class="col-xs-offset-1 col-xs-10" action="./updateGroup.php" method="POST">
+								<div class="form-group">
+									<label for="name">Name:</label>
+									<input type="text" name="name" id="name" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="phone">Phone:</label>
+									<input type="text" name="phone" id="phone" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="email">Email:</label>
+									<input type="text" name="email" id="email" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="groups">Groups:</label>
+									<div id="groups"></div>
+								</div>
+								<div class="form-group extraMargin">			
+							  		<input type="submit" value="Submit" class="btn btn-default">
+									<p id="error"></p>
+								</div>
+							</form>
+					</div>
 				</div>
 			</div>
 		</div>
