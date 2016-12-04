@@ -3,7 +3,7 @@
 	$groupId = $_POST["groupId"];
 	
 	$dbConn = getDBConnection();
-	$meetingArray = array();
+	
 	
 	if ($sqlQuery = $dbConn->prepare("SELECT * FROM michiena.GroupMeeting WHERE groupId = ?"))
 	{
@@ -14,11 +14,12 @@
 		
 		while ($rowAsArray = $result->fetch_assoc())
 		{
-			$meetingArray[] = $rowAsArray['meetingId'] . " " . $rowAsArray['groupId'] . " " .  $rowAsArray['groupName'] . " " .  $rowAsArray['meetingDate'] . " " .  $rowAsArray['meetingTime'] . " " .  $rowAsArray['meetingDescription']; 
+			echo "<div class='panel panel-default'>" . 
+      			 "<div class='panel-heading'>" . $rowAsArray['meetingDate'] . " at " . $rowAsArray['meetingTime'] . "</div>" . 
+      			 "<div class='panel-body'>" . $rowAsArray['meetingDescription'] .  "</div>" . 
+				 "</div>";
 		}
 	}
-
-	echo implode("<br>", $meetingArray);
 	
 	function getDBConnection() {
 		

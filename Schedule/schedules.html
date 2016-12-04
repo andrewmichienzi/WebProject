@@ -61,6 +61,16 @@
 			</ul>	
 		</nav>
 	</div>
+<<<<<<< Updated upstream
+=======
+	<form action="./createUserScheduleForm.html">
+    	<input type="submit" value="Create User Schedule" />
+	</form>
+	<br>
+	<form action="./createMeetingForm.html">
+    	<input type="submit" value="Create Group Meeting" />
+	</form>
+>>>>>>> Stashed changes
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -98,5 +108,42 @@
 				</div>
 			</div>
 		</div>
+<<<<<<< Updated upstream
 	</div>	
+=======
+	</div>
+	<script>
+	$(document).ready(function () {
+			var userInfo;
+			getSessionInfo(userInfo);
+		});
+
+		function getSessionInfo(userInfo) {
+			$.ajax("../getSessionInformationAjax.php")
+			.done(function(data) {
+				data = JSON.parse(data);
+				if(data.userVars == 'false') {
+					window.location.href = "../login.html";
+					$("#txtGroupId").val(userInfo.groupId);
+				} else {
+					userInfo = data;
+					$('#user').text(userInfo.name);
+					$.ajax({
+					type: "POST",
+					data: { groupId: userInfo.groupId},
+					url: "./queryGroupMeeting.php" 
+			}).done(function(data){
+					 
+				document.getElementById("contentBody").innerHTML = data;
+			});
+				}
+			});
+			
+				
+		}
+
+			
+	</script>
+	
+>>>>>>> Stashed changes
 </body>
