@@ -1,52 +1,15 @@
 <!DOCTYPE html>
 <head>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- Site-wide css -->
 	<link rel="stylesheet" href="../default.css">
-</head>
-<body>
-	<div id = "header">
-		<div class="row">
-				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
-		</div>
-		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
-			<ul class="nav navbar-nav">
-				<li><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
-				<li><a id="currentProject" href="#"></a></li>
-				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
-				<li class="active"><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
-				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
-				<li><a id="groupMembers" href="../GroupMembers/groupMembers.html">Group Members</a></li>
-			</ul>	
-			<ul class="nav navbar-nav navbar-right">
-				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
-				<li><a id="signout" href="../signout.php">Log Out</a></li>
-			</ul>
-		</nav>
-
-	</div>
-	<form action="http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/createUserScheduleForm.html">
-    	<input type="submit" value="Create User Schedule" />
-	</form>
-	<br>
-	<form action="http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/createMeetingForm.html">
-    	<input type="submit" value="Create Group Meeting" />
-	</form>
-	<div id="content" class=" col-xs-10 col-xs-offset-1">
-		<div class="panel panel-default">
-			<div id="contentBody" class="panel-body">
-				
-			</div>
-		</div>
-	</div>
 	<script>
 	$(document).ready(function () {
 			var userInfo;
@@ -57,27 +20,83 @@
 			$.ajax("../getSessionInformationAjax.php")
 			.done(function(data) {
 				data = JSON.parse(data);
+				var gIdVal = 1;
 				if(data.userVars == 'false') {
 					window.location.href = "../login.html";
-					$("#txtGroupId").val(userInfo.groupId);
+				} else if( data.groupVar  == 'false') {
+					window.location.href = '../Home/home.html';
 				} else {
 					userInfo = data;
 					$('#user').text(userInfo.name);
+					$('#currentProject').text(userInfo.groupName);
+					$.ajax({
+						type: "POST",
+						data: { groupId: data.groupId },
+						url: "http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/queryGroupMeeting.php" 
+					}).done(function(data){
+						document.getElementById("contentBody").innerHTML = data;
+					});
 				}
 			});	
 		}
-
-			var gIdVal = 1;
-
-
-			$.ajax({
-					type: "POST",
-					data: { groupId: gIdVal},
-					url: "http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/queryGroupMeeting.php" 
-			}).done(function(data){
-					 
-				document.getElementById("contentBody").innerHTML = data;
-			});
 	</script>
-	
+</head>
+<body>
+	<div id = "header">
+		<div class="row">
+				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
+		</div>
+		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
+			<ul id="leftNav" class="nav navbar-nav">
+				<li><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li><a id="currentProject" href="../Home/groupHome.php"></a></li>
+				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
+				<li class="active"><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
+				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
+				<li><a id="signout" href="../signout.php">Log Out</a></li>
+			</ul>	
+		</nav>
+	</div>
+	<div id="content" class=" col-xs-10 col-xs-offset-1">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Actions</h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="panel-body">
+								<div class="row">
+									<div class="thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1">
+										<form action="http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/createUserScheduleForm.html">
+											<input class="btn-link h4" type="submit" value="Create User Schedule" />
+										</form>
+									</div>
+									<div class="thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-2">
+										<form action="http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/createMeetingForm.html">
+											<input class="btn-link h4" type="submit" value="Create Group Meeting" />
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4>Group Meetings</h4>
+					</div>
+					<div id="container" class="panel-body">
+						<div  id="contentBody" >
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
 </body>

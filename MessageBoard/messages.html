@@ -1,80 +1,109 @@
 <!DOCTYPE html>
 <head>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- Site-wide css -->
 	<link rel="stylesheet" href="../default.css">
+	<style>
+		#date {
+			float: right;
+		}
+	</style>
 	<script>
-	$(document).ready(function(){
-	$.ajax("./getPosts.php")
-		.done(function(data) {
-			if(data != "none"){
-				var obj = JSON.parse(data);
-				var row = $("<div class='row'>");
-				$("#container").append(row);
-				for(key in obj){
-					var val1 = key;
-					var val2 = obj[key];
-					row = $("<div class='row'>");
-					row.append("<b>" +val2.date + "</b><br>");
-					row.append("<b>" + val2.user + "</b><br>");
-					row.append(val2.message + "<br><br>");
-					$("#container").prepend(row);
-				} 
-			} else {
-				var row = $("<div class='row'>");
-				$("#container").append(row);
-				row = $("<div class='row'>");
-				$row.append("There are no posts. Maybe you should make one.");
-				$("#container").append(row);
-			}
+		$(document).ready(function(){
+			var userInfo;
+			getSessionInfo(userInfo);
+		
+			$.ajax("./getPosts.php")
+				.done(function(data) {
+					if(data != "none"){
+						var obj = JSON.parse(data);
+						var row = $("<div class='row'>");
+						$("#container").append(row);
+						for(key in obj){
+							var val1 = key;
+							var val2 = obj[key];
+							row = $("<div class='panel panel-default'>");
+							row.append("<div class='panel-heading'>"+ val2.user+"<span id='date'>"+val2.date + "</span></div>");
+							row.append("<div class='panel-body'>"+val2.message + "</div>");
+							$("#container").prepend(row);
+						} 
+					} else {
+						var row = $("<div class='row'>");
+						$("#container").append(row);
+						row = $("<div class='row col-xs-offset-1'>");
+						$row.append("There are no posts. Maybe you should make one.");
+						$("#container").append(row);
+					}
+					$row = '<div class="panel panel-default text-center ">'
+							+ '<div class="panel-body">'
+							+	'<a href="./postMessage.html"><h4>Post a Message</h4></a>'
+							+ '</div></div>';
+					$("#container").prepend($row);
+				});
 			});
-	});
-	
-	function makePost() {
-		window.location.href = "postMessage.html";
-	}
-
+			
+			function getSessionInfo(userInfo) {
+				$.ajax("../getSessionInformationAjax.php")
+				.done(function(data) {
+					data = JSON.parse(data);
+					if(data.userVars == 'false') {
+						window.location.href = "../Home/login.html";
+					} else {
+						userInfo = data;
+						$('#user').text(userInfo.name);
+						if(userInfo.groupVar == 'true') {
+							$('#currentProject').text(userInfo.groupName);
+						} else {
+							$('#currentProject').remove();
+							$('#messages').remove();
+							$('#schedule').remove();
+							$('#tasks').remove();
+							$('#groupMembers').remove();
+						}
+						setGroupNames(data);
+					}
+				});
+			}
 	</script>
 </head>
 <body>
-
-
 	<div id = "header">
 		<div class="row">
 				<img id="logo" class ="bottomMargin col-xs-10 col-sm-2 col-xs-offset-1" src="../logo.png"/>
 		</div>
 		<nav class="navbar navbar-default col-xs-10 col-xs-offset-1" >
-			<ul class="nav navbar-nav">
-				<li><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
-				<li><a id="currentProject" href="#"></a></li>
-				<li class="active"><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
+			<ul id="leftNav" class="nav navbar-nav">
+				<li class="active"><a id="home" href="../Home/home.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+				<li><a id="currentProject" href="../Home/groupHome.php"></a></li>
+				<li><a id="messages" href="../MessageBoard/messages.html">Message Board</a></li>
 				<li><a id="schedule" href="../Schedule/schedules.html">Schedules</a></li>
 				<li><a id="tasks" href="../Tasks/tasks.html">Tasks</a></li>
-				<li><a id="groupMembers" href="../GroupMembers/groupMembers.html">Group Members</a></li>
-			</ul>	
+				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
 				<li><a id="signout" href="../signout.php">Log Out</a></li>
-			</ul>
+			</ul>	
 		</nav>
 	</div>
 	
-	<div id="content" class=" col-xs-10 col-xs-offset-1">
-		<div class="panel panel-default">
-			<div id="contentBody" class="panel-body">
-			<h3>Message Board</h3>
-			<button id="makePost" onclick="makePost()">Make Post</button><br><br>
+	<div id="content" class="col-xs-10 col-xs-offset-1">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Group Messages</h4>
+			</div>
+			<div class="panel-body">
+				
 				<div id="container">
 				</div>
 			</div>
-		</div>
+		</div>	
 	</div>
-	
 </body>

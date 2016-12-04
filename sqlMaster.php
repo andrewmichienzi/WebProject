@@ -48,7 +48,7 @@ if($conn->connection_error) {
 		addGroup($conn, $testGroup3);
 		
 		$addToGroup1 = array("2", "1");
-		addUserToGroup($conn, $testGroup1);
+		addUserToGroup($conn, $addToGroup1);
 		$addToGroup2 = array("3", "1");
 		addUserToGroup($conn, $addToGroup2);
 		$addToGroup3 = array("4", "1");

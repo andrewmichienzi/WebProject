@@ -1,8 +1,14 @@
 <?php
-	
-	require '../checkSessionInformation.php';
-    checkSessionInformation();
 	session_start();
+
+	// Check if user information is set
+	if(!(isset($_SESSION['username']) 
+		&& isset($_SESSION['userId'])
+		&& isset($_SESSION['name']))) {
+			session_regenerate_id(true);
+			echo 'NO_USER_INFO';
+			exit();
+	}
 	
 	$userId = $_SESSION['userId'];
 	
@@ -13,7 +19,7 @@
 	
 	$userData = array();
 	
-	$sql = "SELECT * FROM Users WHERE userId ='".$userId."';";
+	$sql = "SELECT * FROM Users WHERE userId =".$userId.";";
 	$result = mysql_query($sql, $conn);
 	
 	while($row = mysql_fetch_array($result)) {
