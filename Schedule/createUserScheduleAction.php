@@ -89,20 +89,16 @@
 	{
 		$dbConn = getDBConnection();
 		$sqlStatement = "";
-		echo "test";
 		if (!($sqlStatement = $dbConn->prepare("INSERT INTO michiena.UserSchedule (userId, availability) VALUES (?, ?)"))) 
 		{
 			die( "Error preparing: (" .$dbConn->errno . ") " . $dbConn->error);			
 		}		
-		echo "test";
 		if (!($sqlStatement->bind_param('is', $GLOBALS["userId"], $GLOBALS["availability"])))
 		{
 			die( "Error in bind_param: (" .$dbConn->errno . ") " . $dbConn->error);
 		}		
-		echo "test";
 		$sqlStatement->execute();
 		$sqlStatement->close();
 		$dbConn->close();
-		echo "test";
 	}
 ?>
