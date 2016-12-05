@@ -41,17 +41,29 @@
 		$columnSql = "Select columnName, name from TaskColumns;";
 		$columnRet = mysql_query($columnSql, $conn);
 		$sql = "Select ";
-		echo '<table id="taskTable">';
+		echo '<table id="taskTable" class="table">';
 		echo "<tr>";
 		$numOfRows = 0;
+		$columnSizes = array(2, 4, 2, 2, 1, 1);
 		while($row = mysql_fetch_array($columnRet))
 		{
+			//class="col-xs-4
 			$sql.= $row['columnName'] . ", ";
-			echo "<th>".$row['name'] . "</th>";
+			echo '<th class="col-xs-'.$columnSizes[$numOfRows].'">'.$row['name'] . '</th>';
 			$numOfRows++;
 		}
-		echo "<th>Completed</th>";	
-		echo "<th>Delete Task</th>";
+		/*
+		Columns:
+			0 Task Name
+			1 Task Description
+			2 Group Name
+			3 Course
+			4 Completed
+			5 Delete Button
+		*/
+		
+		echo '<th class="col-xs-1">Completed</th>';	
+		echo '<th class="col-xs-1">Delete Task</th>';
 		echo "</tr>";
 		//$sql = substr($sql, 0, -2);
 		$sql .= "t.completed, t.taskId from Tasks as t left join Groups as g on g.groupId = t.groupId where t.userId = ".$GLOBALS['userId'];
@@ -62,25 +74,38 @@
 		}
 		$sql .= ";";
 		$retVal = mysql_query($sql, $conn);
-	
+		$i = 0;
 		while($row = mysql_fetch_array($retVal)){
+			//Each row
 			$taskId = $row[$numOfRows+1];
 			$completed = $row[$numOfRows];
-			echo '<tr id="task'.$taskId.'">';
+			echo '<tr id="task'.$taskId;
+			if($i%2 == 1)
+			{
+				//even
+				echo '" class="even"';
+			}		
+			else
+			{
+				echo'" class="odd"';
+			}
+			echo'>';
 			$index = 0;
 			while($index < $numOfRows)
 			{ 
-				echo "<td>". $row[$index] . "</td>";
+			//each column
+				echo '<td class="col-xs-'.$columnSizes[$index].'">'. $row[$index] . '</td>';
 				$index++;
 			}
-			echo '<td><input type="checkbox"';
+			echo '<td class="col-xs-1"><input type="checkbox"';
 			if($completed)
 			{
 				echo ' checked';
 			}
 			echo' id="checkBox'.$taskId.'" class="table" onclick="checkBoxTask('.$taskId.');"/></td>';
-			echo '<td><input type="button" class="deleteButton" value="Delete" onclick="deleteTask('.$taskId.');"/></td>';
+			echo '<td class="col-xs-1"><input type="button" class="deleteButton" value="Delete" onclick="deleteTask('.$taskId.');"/></td>';
 			echo "</tr>";
+			$i++;
 		}	
 		echo "</table>";
 	}
@@ -126,24 +151,24 @@
 	{
 		$sql = "DROP TABLE TaskColumns;";
 		mysql_query($sql, $conn);
-		$sql = "CREATE TABLE TaskColumns (columnName varchar(50) NOT NULL, name varchar(50) NOT NULL, PRIMARY KEY(columnName, name));";
+		$sql = "CREATE TABLE TaskColumns (columnName varchar(50) NOT NULL, name varchar(50) NOT NULL, columnSize INT NOT NULL, PRIMARY KEY(columnName, name));";
 		$retval = mysql_query($sql, $conn);
 		if(! $retval){
 			die('Creating TaskColumns Table issue:  ' . mysql_error());
 		}
-		$columnArgs = array("g.name", "Group Name");
+		$columnArgs = array("t.name", "Task", 4);
 		addToTaskColumn($conn, $columnArgs);
-		$columnArgs = array("g.course", "Course");
+		$columnArgs = array("t.description", "Description", 6);
 		addToTaskColumn($conn, $columnArgs);
-		$columnArgs = array("t.name", "Task");
+		$columnArgs = array("g.name", "Group Name", 2);
 		addToTaskColumn($conn, $columnArgs);
-		$columnArgs = array("t.description", "Description");
+		$columnArgs = array("g.course", "Course", 2);
 		addToTaskColumn($conn, $columnArgs);
 	}
 
 	function addToTaskColumn($conn, $args)
 	{
-		$sql = "INSERT INTO TaskColumns (columnName, name) VALUES ('" . $args[0] . "', '" . $args[1] . "');";	
+		$sql = "INSERT INTO TaskColumns (columnName, name, columnSize) VALUES ('" . $args[0] . "', '" . $args[1] . "', '" . $args[2] . "');";	
 		$retVal = mysql_query($sql, $conn);
 		if (! $retVal){
 			die('Adding to UserGroups Table issue:  ' . mysql_error());

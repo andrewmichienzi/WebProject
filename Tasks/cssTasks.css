@@ -1,0 +1,23 @@
+table, th, td {
+	border-collapse: collapse;
+	width:100%;
+}
+
+.even{
+	background-color: lightgrey;
+}
+
+th, td{
+	padding: 15px;
+}
+
+th{
+	background-color: blue;
+	color: white;
+	text-align: middle;
+}
+
+input[type="text"]{
+	width: 100px;
+}
+

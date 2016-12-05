@@ -7,6 +7,8 @@
 	<!-- Site-wide css -->
 	<link rel="stylesheet" href="../default.css">
 	<!-- JQuery -->
+	<!-- Task Style css -->
+	<link rel="stylesheet" href="cssTasks.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -171,23 +173,29 @@
 		<div class="panel panel-default">
 			<div id="contentBody" class="panel-body">
 		<!-- Sort By Box -->
-				<div id="sortBy">
-					Sort By: <div id="orderBy"></div>
-				</form>
+				<div class="form-group" id="sortBy">
+					<label for="orderBy">Sort By</label><div id="orderBy"></div>
 				</div>
-				<br>
-				<br>
 		<!-- Tasks -->
+				<h2>Tasks</h2>
 				<div id="taskList">
 				</div>
-				<br>
-				<br>
 		<!-- Add Task -->
+				<h2>Add a Task</h2>
 				<div id="addTask">
-				<form action="" onsubmit="addTask()">
-					Task: <input type="text" name="taskName" id="taskName"><br>
-					Description: <input type="text" name="taskDescription" id="taskDescription"><br>
-					Group: <div id="groupNames"></div><br>
+				<form class="col-xs-6 col-offset-1" action="" onsubmit="addTask()">
+					<div class="form-group">
+						<label for="taskName">Task: </label>
+						<input type="text-area" class="form-control" name="taskName" size="50px" id="taskName" placeholder="Name">
+					</div>
+					<div class="form-group">
+						<label for="taskDescription">Description: </label> 
+						<input type="text-area" class="form-control" size="100px" name="taskDescription" id="taskDescription" placeholder="Description">
+					</div>
+					<div class="form-group">
+						<label for"groupNames">Group:</label> 
+						<div id="groupNames"></div>
+					</div>
 					<input type="submit" value="Add Task">
 				</form>
 				</div>	
