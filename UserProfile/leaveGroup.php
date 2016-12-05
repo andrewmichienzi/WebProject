@@ -1,6 +1,6 @@
 <?php
 
-	require '../checkSessionInformation.php';
+	include  '../checkSessionInformation.php';
     checkSessionInformation();
 	session_start();
 	
@@ -12,8 +12,9 @@
 		die("Connection failed: " . $conn->connect_error);
 	
 	$groupId = $_POST['group'];
-	
-	$sql = "DELETE FROM UserGroups WHERE groupId = '".$groupId."' AND userId = '".$userId."';";
+
+	$sql = "DELETE FROM UserGroups WHERE groupId = ".$groupId." AND userId = ".$userId.";";
 	$result = mysql_query($sql, $conn);
-	
+	echo mysql_affected_rows($result);
+	echo 'hi';
 ?>

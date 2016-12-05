@@ -89,20 +89,49 @@
 	{
 		$dbConn = getDBConnection();
 		$sqlStatement = "";
-		echo "test";
-		if (!($sqlStatement = $dbConn->prepare("INSERT INTO michiena.UserSchedule (userId, availability) VALUES (?, ?)"))) 
+		$sqlQuery = "";
+		$scheduleExists = false;
+
+		if (($sqlQuery = $dbConn->prepare("SELECT * FROM michiena.UserSchedule WHERE userId = ?")))
 		{
-			die( "Error preparing: (" .$dbConn->errno . ") " . $dbConn->error);			
-		}		
-		echo "test";
-		if (!($sqlStatement->bind_param('is', $GLOBALS["userId"], $GLOBALS["availability"])))
+			if (($sqlQuery->bind_param('i', $GLOBALS["userId"])))
+			{
+				$sqlQuery->execute();
+				$result = $sqlQuery->get_result();	
+				$sqlQuery->close();
+		
+				while ($rowAsArray = $result->fetch_assoc())
+				{
+					$scheduleExists = true;		
+				}
+			}
+		}
+		if ($scheduleExists)
 		{
-			die( "Error in bind_param: (" .$dbConn->errno . ") " . $dbConn->error);
-		}		
-		echo "test";
-		$sqlStatement->execute();
+			if (!($sqlStatement = $dbConn->prepare("UPDATE michiena.UserSchedule SET availability = ? WHERE userId = ?"))) 
+			{
+				die( "Error preparing: (" .$dbConn->errno . ") " . $dbConn->error);			
+			}		
+			if (!($sqlStatement->bind_param('si', $GLOBALS["availability"], $GLOBALS["userId"])))
+			{
+				die( "Error in bind_param: (" .$dbConn->errno . ") " . $dbConn->error);
+			}
+			$sqlStatement->execute();
+		}
+		else
+		{
+			if (!($sqlStatement = $dbConn->prepare("INSERT INTO michiena.UserSchedule (userId, availability) VALUES (?, ?)"))) 
+			{
+				die( "Error preparing: (" .$dbConn->errno . ") " . $dbConn->error);			
+			}		
+			if (!($sqlStatement->bind_param('is', $GLOBALS["userId"], $GLOBALS["availability"])))
+			{
+				die( "Error in bind_param: (" .$dbConn->errno . ") " . $dbConn->error);
+			}
+			$sqlStatement->execute();
+		}
+				
 		$sqlStatement->close();
 		$dbConn->close();
-		echo "test";
 	}
 ?>

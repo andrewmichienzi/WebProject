@@ -15,7 +15,7 @@
 
 	$message = $_POST['message'];
 	
-	$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES ('".$groupId."', '".$userId."', NOW(), '".$message."');";
+	$sql = "INSERT INTO MessageBoard (groupId, userId, postDate, message) VALUES (".$groupId.", ".$userId.", NOW(), '".$message."');";
 	mysql_query($sql, $conn);
 
 ?>

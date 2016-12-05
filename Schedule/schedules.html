@@ -32,7 +32,7 @@
 					$.ajax({
 						type: "POST",
 						data: { groupId: data.groupId },
-						url: "http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/queryGroupMeeting.php" 
+						url: "./queryGroupMeeting.php" 
 					}).done(function(data){
 						document.getElementById("contentBody").innerHTML = data;
 					});
@@ -61,6 +61,7 @@
 			</ul>	
 		</nav>
 	</div>
+
 	<div id="content" class=" col-xs-10 col-xs-offset-1">
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -73,12 +74,12 @@
 							<div class="panel-body">
 								<div class="row">
 									<div class="thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1">
-										<form action="http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/createUserScheduleForm.html">
+										<form action="./createUserScheduleForm.html">
 											<input class="btn-link h4" type="submit" value="Create User Schedule" />
 										</form>
 									</div>
 									<div class="thumbnail text-center buttonRow col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-2">
-										<form action="http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/createMeetingForm.html">
+										<form action="./createMeetingForm.html">
 											<input class="btn-link h4" type="submit" value="Create Group Meeting" />
 										</form>
 									</div>
@@ -98,5 +99,8 @@
 				</div>
 			</div>
 		</div>
+
 	</div>	
+
+	</div>
 </body>

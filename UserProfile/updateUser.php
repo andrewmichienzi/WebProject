@@ -15,7 +15,7 @@
 	$phone = $_POST['phone'];
 	$email = $_POST['email'];
 	
-	$sql = "UPDATE Users SET name='".$name."', email='".$email."', phone='".$phone."' WHERE userId='".$userId."';" ;
+	$sql = "UPDATE Users SET name='".$name."', email='".$email."', phone='".$phone."' WHERE userId=".$userId.";" ;
 	$result = mysql_query($sql, $conn);
-	
+	echo 'hi';
 ?>

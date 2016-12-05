@@ -33,7 +33,8 @@
 					$("#email").val(userData.email);
 					setGroupNames();
 				}
-			)
+			);
+		$('form').submit(submitUpdate);
 	});
 	
 	function setGroupNames(userInfo) {
@@ -91,7 +92,7 @@
 			$.ajax({
 					type:"POST",
 					url:"./updateUser.php",
-					data:{name:$("#name").val(),email:$("#email").val(),phone:$("#phone").val()}
+					data:{ name: $("#name").val(), email: $("#email").val(), phone: $("#phone").val() }
 				}).done(function(data) {
 					window.location.href = "./userProfile.html";
 				});
@@ -114,7 +115,7 @@
 				<li><a id="groupMembers" href="../GroupMembers/groupMembers.php">Group Members</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a id="user" href="../UserProfile/userProfile.html"></a></li>
+				<li class="active"><a id="user" href="../UserProfile/userProfile.html"></a></li>
 				<li><a id="signout" href="../signout.php">Log Out</a></li>
 			</ul>	
 		</nav>
@@ -128,7 +129,7 @@
 						<h4>Update My Profile</h4>
 					</div>
 					<div class="panel-body">
-							<form class="col-xs-offset-1 col-xs-10" action="./updateGroup.php" method="POST">
+							<form class="col-xs-offset-1 col-xs-10" method="POST">
 								<div class="form-group">
 									<label for="name">Name:</label>
 									<input type="text" name="name" id="name" class="form-control">

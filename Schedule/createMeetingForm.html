@@ -76,7 +76,7 @@
 			$.ajax({
 					type: "POST",
 					data: { groupId: idVal},
-					url: "http://cis.gvsu.edu/~escalanm/WebProjGit/WebProject/Schedule/queryUserGroup.php" 
+					url: "./queryUserGroup.php" 
 			}).done(function(data){
 					 
 				var availabilityArray = data.split(";");			
