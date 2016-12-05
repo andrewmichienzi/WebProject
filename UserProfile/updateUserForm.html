@@ -89,6 +89,7 @@
 			&& ($("#email").val() == "" || $("#email").val() == null)) {
 				alert("Please fill out all fields.");
 		} else {
+			//var val = 2;
 			$.ajax({
 					type:"POST",
 					url:"./updateUser.php",
