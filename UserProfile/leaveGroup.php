@@ -1,7 +1,6 @@
 <?php
 
 	include  '../checkSessionInformation.php';
-    checkSessionInformation();
 	session_start();
 	
 	$userId = $_SESSION['userId'];
