@@ -82,7 +82,7 @@ if($conn->connection_error) {
 		addMessage($conn, $testMessage2);
 
 
-		$testUserSchedule1 = array("1", "Monday- 00:00-02:00; Tuesday- 23:00-00:00; Wednesday- 00:00-02:00");
+		$testUserSchedule1 = array("1", "Monday- 00:00-02:00; Tuesday- 23:00-00:00; Wednesday- 00:00-02:00;");
 		addUserSchedule($conn, $testUserSchedule1);
 		$testUserSchedule2 = array("2", "Monday- 10:00-14:00; Wednesday- 14:00-16:00;");
 		addUserSchedule($conn, $testUserSchedule2);
